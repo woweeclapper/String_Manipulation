@@ -1,4 +1,4 @@
-#This was an old string manipulation Java 14 project written on Netbean with a Maven Gradle Structure
+# This was an old string manipulation Java 14 project written on Netbean with a Maven Gradle Structure
 ## Goals and Rough Designs for this Project
 
 - Update from Java 14 to Java 25
