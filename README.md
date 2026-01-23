@@ -3,7 +3,7 @@
 
 - Update from Java 14 to Java 25
 - Refactoring current project into a functional Backend
-- Frontend will be design in vanilla html/cc/js
+- Frontend will be design in vanilla html/css/js
 - Spring Boot will be implemented into Backend once refactoring is done
 
 ## Hosting
