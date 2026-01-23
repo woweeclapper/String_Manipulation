@@ -22,7 +22,7 @@ public class Starter {
 
             mainInput = sc.nextLine();
             mainInput = mainInput.toLowerCase(); // set all input capitalization to lower case to ensure consistent for
-                                                 // the system
+                                    // the system
 
             switch (mainInput) {
                 case "reverse", "r" -> {
