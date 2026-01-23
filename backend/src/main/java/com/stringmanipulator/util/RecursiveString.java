@@ -1,10 +1,10 @@
-package test.stringmanipulator;
+package com.stringmanipulator.util;
 
 /* @author Joe Nguyen */
 
 import java.util.Scanner;
 
-class RecursiveString {
+public class RecursiveString {
 
     static int findSum(int[] array, int length) {
         if (length <= 0)

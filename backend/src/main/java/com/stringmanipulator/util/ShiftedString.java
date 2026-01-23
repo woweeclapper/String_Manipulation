@@ -1,10 +1,10 @@
-package test.stringmanipulator;
+package com.stringmanipulator.util;
 
 /* @author Joe Nguyen */
 
 import java.util.*;
 
-class ShiftedString {
+public class ShiftedString {
     public void shifting() {
         // Initializing variables
         String response ;

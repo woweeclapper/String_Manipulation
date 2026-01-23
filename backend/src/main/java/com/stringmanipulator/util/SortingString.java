@@ -1,10 +1,10 @@
-package test.stringmanipulator;
+package com.stringmanipulator.util;
 
 /* @author Joe Nguyen */
 
 import java.util.*;
 
-class SortingString {
+public class SortingString {
     //setting scanner for the whole class
     Scanner scan = new Scanner(System.in);
     

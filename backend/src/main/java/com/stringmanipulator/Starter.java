@@ -1,9 +1,12 @@
-package test.stringmanipulator;
+package com.stringmanipulator;
 
 /* @author Joe Nguyen */
 
 import java.util.*;
-import static test.stringmanipulator.ReverseString.reverse;
+import static com.stringmanipulator.util.ReverseString.reverse;
+import com.stringmanipulator.util.ShiftedString;
+import com.stringmanipulator.util.RecursiveString;
+import com.stringmanipulator.util.SortingString;
 
 public class Starter {
     public static void main(String[] args) {

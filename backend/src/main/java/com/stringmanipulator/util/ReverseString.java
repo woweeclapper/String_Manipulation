@@ -1,11 +1,11 @@
-package test.stringmanipulator;
+package com.stringmanipulator.util;
 
 /* @author Joe Nguyen */
 
-class ReverseString
+public class ReverseString
 {
     //Recursive function that reverses a string
-   static void reverse(String str) 
+   public static void reverse(String str) 
     { 
         //If the string is null or consists of single character, then output the entered string 
         if ((str == null)||(str.length() <= 1)) 
