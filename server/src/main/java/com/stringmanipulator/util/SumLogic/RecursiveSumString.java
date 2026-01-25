@@ -1,8 +1,8 @@
-package com.stringmanipulator.util;
+package com.stringmanipulator.util.SumLogic;
 
 /* @author Joe Nguyen */
 
-public class RecursiveString {
+public class RecursiveSumString {
 
     public static int findSum(int[] array, int length) {
         if (length == 1) {

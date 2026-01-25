@@ -47,7 +47,7 @@ public class SortingString {
         return oddNumbers;
     }
 
-    public static int[] separateEvenAndOdd(int[] array, ArrayList<Integer> evenNumbers, ArrayList<Integer> oddNumbers) {
+    public static void separateEvenAndOdd(int[] array, ArrayList<Integer> evenNumbers, ArrayList<Integer> oddNumbers) {
         for (int num : array) {
             if (num % 2 == 0) {
                 evenNumbers.add(num);
@@ -55,6 +55,36 @@ public class SortingString {
                 oddNumbers.add(num);
             }
         }
-        return array;
+    }
+
+    // Double array sorting methods
+    public static double[] sortAscending(double[] array) {
+        double[] sortedArray = Arrays.copyOf(array, array.length);
+        Arrays.sort(sortedArray);
+        return sortedArray;
+    }
+
+    public static double[] sortDescending(double[] array) {
+        double[] sortedArray = sortAscending(array);
+        int last = sortedArray.length - 1;
+        int middle = sortedArray.length / 2;
+
+        for (int i = 0; i <= middle; i++) {
+            double temp = sortedArray[i];
+            sortedArray[i] = sortedArray[last - i];
+            sortedArray[last - i] = temp;
+        }
+        return sortedArray;
+    }
+
+    // Double separation logic
+    public static void separatePositiveAndNegative(double[] array, ArrayList<Double> positiveNumbers, ArrayList<Double> negativeNumbers) {
+        for (double num : array) {
+            if (num >= 0) {
+                positiveNumbers.add(num);
+            } else {
+                negativeNumbers.add(num);
+            }
+        }
     }
 }
