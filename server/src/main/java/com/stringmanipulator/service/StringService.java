@@ -6,6 +6,7 @@ import com.stringmanipulator.util.SumLogic.DoubleSumString;
 import com.stringmanipulator.util.SumLogic.RecursiveSumString;
 
 import java.util.ArrayList;
+import java.util.function.Supplier;
 
 import static com.stringmanipulator.util.ReverseString.reverse;
 
@@ -98,7 +99,11 @@ public class StringService {
     public int[] sortArray(int[] arrayToSort, String sortType, String order) {
         try {
             validateArray(arrayToSort);
-            return sortArrayCommon(arrayToSort, sortType, order, true);
+            return sortArrayCommon(
+                    () -> handleOrderSort(arrayToSort, order.toLowerCase().trim()),
+                    () -> handleSeparation(arrayToSort),
+                    sortType, order);
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to sort int array: " + e.getMessage(), e);
         }
@@ -107,37 +112,32 @@ public class StringService {
     public double[] sortArray(double[] arrayToSort, String sortType, String order) {
         try {
             validateArray(arrayToSort);
-            return sortArrayCommon(arrayToSort, sortType, order, false);
+            return sortArrayCommon(
+                    () -> handleOrderSort(arrayToSort, order.toLowerCase().trim()),
+                    () -> handleSeparation(arrayToSort),
+                    sortType, order);
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to sort double array: " + e.getMessage(), e);
         }
     }
 
-    //sorting
-    private <T> T sortArrayCommon(T array, String sortType, String order, boolean isIntArray) {
-        validateSortParameters(sortType, order);
+    //this method can be called by either of the array data type method and will return based on what the overload function return
+    private <T> T sortArrayCommon(Supplier<T> orderAction, Supplier<T> separateAction, String sortType, String order) {
 
+        validateSortParameters(sortType, order);
         sortType = sortType.toLowerCase().trim();
 
         if ("order".equals(sortType) || "o".equals(sortType)) {
-            order = order.toLowerCase().trim();
-            if (isIntArray) {
-                return handleOrderSort((int[]) array, order);
-            } else {
-                return handleOrderSort((double[]) array, order);
-            }
+            return orderAction.get();
         } else if ("separate".equals(sortType) || "s".equals(sortType)) {
-            if (isIntArray) {
-                return handleSeparation((int[]) array);
-            } else {
-                return handleSeparation((double[]) array);
-            }
+            return separateAction.get();
         } else {
             throw new IllegalArgumentException("Sort type must be 'order'/'o' or 'separate'/'s'");
         }
     }
 
-    // Parameter validation
+    // sort Parameter validation
     private void validateSortParameters(String sortType, String order) {
         if (sortType == null || sortType.trim().isEmpty()) {
             throw new IllegalArgumentException("Sort type cannot be null or empty");
@@ -280,15 +280,6 @@ public class StringService {
         }
     }
 
-    sealed interface NumericArray permits IntArray, DoubleArray {
-    }
-
-    record IntArray(int[] value) implements NumericArray {
-
-    }
-
-    record DoubleArray(double[] value) implements NumericArray {
-    }
 }
 
 
