@@ -1,12 +1,11 @@
 package com.stringmanipulator.service;
 
 import com.stringmanipulator.util.ShiftedString;
-import com.stringmanipulator.util.SortingString;
-import com.stringmanipulator.util.SumLogic.DoubleSumString;
-import com.stringmanipulator.util.SumLogic.RecursiveSumString;
+import com.stringmanipulator.util.SortingArray;
+import com.stringmanipulator.util.SumLogic.DoubleSumArray;
+import com.stringmanipulator.util.SumLogic.RecursiveSumArray;
 
 import java.util.ArrayList;
-import java.util.function.Supplier;
 
 import static com.stringmanipulator.util.ReverseString.reverse;
 
@@ -83,7 +82,7 @@ public class StringService {
         if (arrayToSum.length == 1) {
             return arrayToSum[0];
         }
-        return RecursiveSumString.findSum(arrayToSum, arrayToSum.length);
+        return RecursiveSumArray.findSum(arrayToSum, arrayToSum.length);
     }
 
     public double sumArray(double[] arrayToSum) {
@@ -91,100 +90,160 @@ public class StringService {
         if (arrayToSum.length == 1) {
             return arrayToSum[0];
         }
-        return DoubleSumString.findSum(arrayToSum, arrayToSum.length);
+        return DoubleSumArray.findSum(arrayToSum, arrayToSum.length);
     }
 
     /**************************************************************************/
 
-    public int[] sortArray(int[] arrayToSort, String sortType, String order) {
+    public int[] sortArray(int[] arrayToSort, String orderType) {
         try {
             validateArray(arrayToSort);
-            return sortArrayCommon(
-                    () -> handleOrderSort(arrayToSort, order.toLowerCase().trim()),
-                    () -> handleSeparation(arrayToSort),
-                    sortType, order);
-
+            validateOrderParameters(orderType);
+            String normalizedOrder = normalizeOrderType(orderType);
+            return handleSorting(arrayToSort, normalizedOrder);
         } catch (Exception e) {
             throw new RuntimeException("Failed to sort int array: " + e.getMessage(), e);
         }
     }
 
-    public double[] sortArray(double[] arrayToSort, String sortType, String order) {
+    public double[] sortArray(double[] arrayToSort, String orderType) {
         try {
             validateArray(arrayToSort);
-            return sortArrayCommon(
-                    () -> handleOrderSort(arrayToSort, order.toLowerCase().trim()),
-                    () -> handleSeparation(arrayToSort),
-                    sortType, order);
-
+            validateOrderParameters(orderType);
+            String normalizedOrder = normalizeOrderType(orderType);
+            return handleSorting(arrayToSort, normalizedOrder);
         } catch (Exception e) {
             throw new RuntimeException("Failed to sort double array: " + e.getMessage(), e);
         }
     }
 
-    //this method can be called by either of the array data type method and will return based on what the overload function return
-    private <T> T sortArrayCommon(Supplier<T> orderAction, Supplier<T> separateAction, String sortType, String order) {
+    /**************************************************************************/
 
-        validateSortParameters(sortType, order);
-        sortType = sortType.toLowerCase().trim();
 
-        if ("order".equals(sortType) || "o".equals(sortType)) {
-            return orderAction.get();
-        } else if ("separate".equals(sortType) || "s".equals(sortType)) {
-            return separateAction.get();
-        } else {
-            throw new IllegalArgumentException("Sort type must be 'order'/'o' or 'separate'/'s'");
+    public SeparationResult<Integer> separateArray(int[] arrayToPart, String separationType) {
+        try {
+            validateArray(arrayToPart);
+            validateSeparationParameters(separationType);
+            String normalizedSeparation = normalizeSeparationType(separationType);
+            return handleSeparation(arrayToPart, normalizedSeparation);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to separate int array: " + e.getMessage(), e);
         }
     }
 
-    // sort Parameter validation
-    private void validateSortParameters(String sortType, String order) {
-        if (sortType == null || sortType.trim().isEmpty()) {
-            throw new IllegalArgumentException("Sort type cannot be null or empty");
+    public SeparationResult<Double> separateArray(double[] arrayToPart, String separationType) {
+        try {
+            validateArray(arrayToPart);
+            validateSeparationParameters(separationType);
+            String normalizedSeparation = normalizeSeparationType(separationType);
+            return handleSeparation(arrayToPart, normalizedSeparation);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to separate double array: " + e.getMessage(), e);
         }
-        if (("order".equals(sortType.toLowerCase().trim()) || "o".equals(sortType.toLowerCase().trim()))
-                && (order == null || order.trim().isEmpty())) {
-            throw new IllegalArgumentException("Order cannot be null or empty for order sorting");
-        }
-    }
-
-    // Type-specific handlers
-    private int[] handleOrderSort(int[] array, String order) {
-        if ("ascending".equals(order) || "a".equals(order)) {
-            return SortingString.sortAscending(array);
-        } else if ("descending".equals(order) || "d".equals(order)) {
-            return SortingString.sortDescending(array);
-        } else {
-            throw new IllegalArgumentException("Order must be 'ascending'/'a' or 'descending'/'d'");
-        }
-    }
-
-    private double[] handleOrderSort(double[] array, String order) {
-        if ("ascending".equals(order) || "a".equals(order)) {
-            return SortingString.sortAscending(array);
-        } else if ("descending".equals(order) || "d".equals(order)) {
-            return SortingString.sortDescending(array);
-        } else {
-            throw new IllegalArgumentException("Order must be 'ascending'/'a' or 'descending'/'d'");
-        }
-    }
-
-    private int[] handleSeparation(int[] array) {
-        ArrayList<Integer> evenNumbers = new ArrayList<>();
-        ArrayList<Integer> oddNumbers = new ArrayList<>();
-        SortingString.separateEvenAndOdd(array, evenNumbers, oddNumbers);
-        return array; // Return original, controller can access separated lists
-    }
-
-    private double[] handleSeparation(double[] array) {
-        ArrayList<Double> positiveNumbers = new ArrayList<>();
-        ArrayList<Double> negativeNumbers = new ArrayList<>();
-        SortingString.separatePositiveAndNegative(array, positiveNumbers, negativeNumbers);
-        return array; // Return original, controller can access separated lists
     }
 
     /**************************************************************************/
+
+    // Parameter validation
+    private void validateOrderParameters(String orderType) {
+        if (orderType == null || orderType.trim().isEmpty()) {
+            throw new IllegalArgumentException("Order type cannot be null or empty");
+        }
+    }
+
+    private void validateSeparationParameters(String separationType) {
+        if (separationType == null || separationType.trim().isEmpty()) {
+            throw new IllegalArgumentException("Separation type cannot be null or empty");
+        }
+    }
+
+    // Parameter normalization methods
+    private String normalizeOrderType(String orderType) {
+        String normalized = orderType.toLowerCase().trim();
+        return switch (normalized) {
+            case "ascending", "a" -> "ascending";
+            case "descending", "d" -> "descending";
+            default -> throw new IllegalArgumentException("Order must be 'ascending'/'a' or 'descending'/'d'");
+        };
+    }
+
+    private String normalizeSeparationType(String separationType) {
+        String normalized = separationType.toLowerCase().trim();
+        return switch (normalized) {
+            case "parity", "p" -> "parity";
+            case "sign", "s" -> "sign";
+            default -> throw new IllegalArgumentException("Separation must be 'parity'/'p' or 'sign'/'s'");
+        };
+    }
+
+    // Type-specific handlers
+    private int[] handleSorting(int[] array, String orderType) {
+        if ("ascending".equals(orderType)) {
+            return SortingArray.sortAscending(array);
+        } else if ("descending".equals(orderType)) {
+            return SortingArray.sortDescending(array);
+        } else {
+            throw new IllegalArgumentException("Order must be 'ascending'/'a' or 'descending'/'d'");
+        }
+    }
+
+    private double[] handleSorting(double[] array, String orderType) {
+        if ("ascending".equals(orderType)) {
+            return SortingArray.sortAscending(array);
+        } else if ("descending".equals(orderType)) {
+            return SortingArray.sortDescending(array);
+        } else {
+            throw new IllegalArgumentException("Order must be 'ascending'/'a' or 'descending'/'d'");
+        }
+    }
+
+    private SeparationResult<Integer> handleSeparation(int[] array, String separationType) {
+        ArrayList<Integer> evenNumbers = new ArrayList<>();
+        ArrayList<Integer> oddNumbers = new ArrayList<>();
+        ArrayList<Integer> positiveNumbers = new ArrayList<>();
+        ArrayList<Integer> negativeNumbers = new ArrayList<>();
+
+        if ("parity".equals(separationType)) {
+
+            SortingArray.separateEvenAndOdd(array, evenNumbers, oddNumbers);
+            return new SeparationResult<>(evenNumbers, oddNumbers, "parity");
+
+        } else if ("sign".equals(separationType)) {
+
+            SortingArray.separatePositiveAndNegative(array, positiveNumbers, negativeNumbers);
+            return new SeparationResult<>(positiveNumbers, negativeNumbers, "sign");
+
+        } else {
+            throw new IllegalArgumentException("Separation must be 'sign'/'s' or 'parity'/'p'");
+        }
+    }
+
+    private SeparationResult<Double> handleSeparation(double[] array, String separationType) {
+        ArrayList<Double> evenNumbers = new ArrayList<>();
+        ArrayList<Double> oddNumbers = new ArrayList<>();
+        ArrayList<Double> positiveNumbers = new ArrayList<>();
+        ArrayList<Double> negativeNumbers = new ArrayList<>();
+
+        if ("parity".equals(separationType)) {
+
+            SortingArray.separateEvenAndOdd(array, evenNumbers, oddNumbers);
+            return new SeparationResult<>(evenNumbers, oddNumbers, "parity");
+
+        } else if ("sign".equals(separationType)) {
+
+            SortingArray.separatePositiveAndNegative(array, positiveNumbers, negativeNumbers);
+            return new SeparationResult<>(positiveNumbers, negativeNumbers, "sign");
+
+        } else {
+            throw new IllegalArgumentException("Separation must be 'sign'/'s' or 'parity'/'p'");
+        }
+    }
+
+    /**************************************************************************/
+
+
 //Reusable Method
+
 
     // Input sanitization method
     private String sanitizeStringInput(String input) {
