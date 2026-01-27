@@ -48,6 +48,7 @@ public class SortingArray {
         return sortedArray;
     }
 
+    /**************************************************************************/
 
     public static void separateEvenAndOdd(int[] array, ArrayList<Integer> evenNumbers, ArrayList<Integer> oddNumbers) {
         for (int num : array) {
