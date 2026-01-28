@@ -5,6 +5,7 @@ public class DoubleSumArray {
         if (length == 1) {
             return array[0];
         }
+        //using recursion in this design context is fine but I see the limitation now
         return (findSum(array, length - 1) + array[length - 1]);
     }
 }
