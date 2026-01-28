@@ -1,4 +1,11 @@
-# This was an old string manipulation Java 14 project written on Netbean with a Maven Gradle Structure
+# This was an old string manipulation Java 14 project written on Netbean IDE with a Maven Structure
+
+Its original purpose was asking the user to input through the console UI.
+It asked the user to input a string or elements based on the service they want.
+Reverse and Shift ask for string as input as well as additional parameter for shifted.
+Sort and Sum ask for an array of elements after verifying the length the user want and each elements must be inputted.
+Small amount of input validations was implemented but it was merely a final project for a class.
+
 ## Goals and Rough Designs for this Project
 
 - Update from Java 14 to Java 25
