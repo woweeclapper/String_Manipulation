@@ -43,9 +43,7 @@ class ReverseStringTest {
     @Test
     @DisplayName("Test null input - should throw exception")
     void testNullInput() {
-        assertThrows(NullPointerException.class, () -> {
-            ReverseString.reverse(null);
-        });
+        assertThrows(NullPointerException.class, () -> ReverseString.reverse(null));
     }
 
     @Test
@@ -86,11 +84,7 @@ class ReverseStringTest {
     @Test
     @DisplayName("Test long string")
     void testLongString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 100; i++) {
-            sb.append("a");
-        }
-        String original = sb.toString();
+        String original = "a".repeat(100);
         StringBuilder reversed = new StringBuilder(original).reverse();
         assertEquals(reversed.toString(), ReverseString.reverse(original));
     }

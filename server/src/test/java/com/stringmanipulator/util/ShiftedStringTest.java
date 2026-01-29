@@ -182,21 +182,13 @@ class ShiftedStringTest {
     void testInvalidChoice() {
         String original = "test";
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            ShiftedString.shifting(original, 1, "invalid");
-        });
+        assertThrows(IllegalArgumentException.class, () -> ShiftedString.shifting(original, 1, "invalid"));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            ShiftedString.shifting(original, 2, "up");
-        });
+        assertThrows(IllegalArgumentException.class, () -> ShiftedString.shifting(original, 2, "up"));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            ShiftedString.shifting(original, 3, "down");
-        });
+        assertThrows(IllegalArgumentException.class, () -> ShiftedString.shifting(original, 3, "down"));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            ShiftedString.shifting(original, 1, null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> ShiftedString.shifting(original, 1, null));
     }
 
     @Test
@@ -233,11 +225,7 @@ class ShiftedStringTest {
     @Test
     @DisplayName("Test performance with large Unicode strings")
     void testPerformanceWithLargeUnicodeStrings() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 1000; i++) {
-            sb.append("😊");
-        }
-        String largeUnicode = sb.toString();
+        String largeUnicode = "😊".repeat(1000);
 
         // Should handle large Unicode strings efficiently
         String result = ShiftedString.shifting(largeUnicode, 100, "left");

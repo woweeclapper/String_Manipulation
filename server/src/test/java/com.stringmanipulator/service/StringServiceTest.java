@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import java.time.Duration;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,7 +53,7 @@ class StringServiceTest {
     @Test
     @DisplayName("reverseString - control characters are removed")
     void reverseString_WithControlCharacters_RemovesControlCharacters() {
-        assertEquals("tset", stringService.reverseString("t\0e\1s\2t"));;
+        assertEquals("tset", stringService.reverseString("t\0e\1s\2t"));
         assertEquals("t\te\n\r t", stringService.reverseString("t\r\ne\tt"));// Should keep these
     }
 

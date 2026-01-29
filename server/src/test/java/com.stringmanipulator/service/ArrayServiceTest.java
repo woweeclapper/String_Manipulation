@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -199,8 +197,7 @@ class ArrayServiceTest {
         assertEquals(SeparationResult.SeparationType.PARITY, result.getSeparationType());
         assertArrayEquals(new double[]{2.0, 4.0}, result.getEven().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
         assertArrayEquals(new double[]{1.0, 3.0}, result.getOdd().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
-        assertIterableEquals(List.of(2.0, 4.0), result.getEven());
-        assertIterableEquals(List.of(1.0, 3.0), result.getOdd());
+
     }
 
     @Test
@@ -211,8 +208,7 @@ class ArrayServiceTest {
         assertEquals(SeparationResult.SeparationType.SIGN, result.getSeparationType());
         assertArrayEquals(new double[]{0.0, 1.0, 2.0}, result.getPositive().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
         assertArrayEquals(new double[]{-2.0, -1.0}, result.getNegative().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
-        assertIterableEquals(List.of(0.0, 1.0, 2.0), result.getPositive());
-        assertIterableEquals(List.of(-2.0, -1.0), result.getNegative());
+
     }
 
     // Type Safety Tests
@@ -221,8 +217,8 @@ class ArrayServiceTest {
         int[] array = {1, 2, 3, 4};
         SeparationResult<Integer> result = arrayService.separateArray(array, "parity");
 
-        assertThrows(IllegalStateException.class, () -> result.getPositive());
-        assertThrows(IllegalStateException.class, () -> result.getNegative());
+        assertThrows(IllegalStateException.class, result::getPositive);
+        assertThrows(IllegalStateException.class, result::getNegative);
     }
 
     @Test
@@ -230,8 +226,8 @@ class ArrayServiceTest {
         int[] array = {-1, 0, 1};
         SeparationResult<Integer> result = arrayService.separateArray(array, "sign");
 
-        assertThrows(IllegalStateException.class, () -> result.getEven());
-        assertThrows(IllegalStateException.class, () -> result.getOdd());
+        assertThrows(IllegalStateException.class, result::getEven);
+        assertThrows(IllegalStateException.class, result::getOdd);
     }
 
     // Edge Cases and Boundary Tests

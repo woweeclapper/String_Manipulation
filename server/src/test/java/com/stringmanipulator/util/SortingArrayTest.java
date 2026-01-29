@@ -3,9 +3,10 @@ package com.stringmanipulator.util;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.BeforeEach;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+
 
 class SortingArrayTest {
 
@@ -114,8 +115,15 @@ class SortingArrayTest {
 
         assertEquals(5, evenNumbers.size());
         assertEquals(5, oddNumbers.size());
-        assertTrue(evenNumbers.containsAll(Arrays.asList(2, 4, 6, 8, 10)));
-        assertTrue(oddNumbers.containsAll(Arrays.asList(1, 3, 5, 7, 9)));
+
+        // Convert to arrays, sort, and compare
+        Integer[] evenArray = evenNumbers.toArray(new Integer[0]);
+        Integer[] oddArray = oddNumbers.toArray(new Integer[0]);
+        Arrays.sort(evenArray);
+        Arrays.sort(oddArray);
+
+        assertArrayEquals(new Integer[]{2, 4, 6, 8, 10}, evenArray);
+        assertArrayEquals(new Integer[]{1, 3, 5, 7, 9}, oddArray);
     }
 
     @Test
@@ -129,8 +137,13 @@ class SortingArrayTest {
 
         assertEquals(3, evenNumbers.size());
         assertEquals(3, oddNumbers.size());
-        assertTrue(evenNumbers.containsAll(Arrays.asList(2.0, 4.0, 6.0)));
-        assertTrue(oddNumbers.containsAll(Arrays.asList(1.0, 3.0, 5.0)));
+        Double[] evenArray = evenNumbers.toArray(new Double[0]);
+        Double[] oddArray = oddNumbers.toArray(new Double[0]);
+        Arrays.sort(evenArray);
+        Arrays.sort(oddArray);
+
+        assertArrayEquals(new Double[]{2.0, 4.0, 6.0}, evenArray);
+        assertArrayEquals(new Double[]{1.0, 3.0, 5.0}, oddArray);
     }
 
     @Test
@@ -144,8 +157,14 @@ class SortingArrayTest {
 
         assertEquals(2, evenNumbers.size());
         assertEquals(3, oddNumbers.size());
-        assertTrue(evenNumbers.containsAll(Arrays.asList(2.0, 4.0)));
-        assertTrue(oddNumbers.containsAll(Arrays.asList(1.5, 3.7, 5.1)));
+        Double[] evenArray = evenNumbers.toArray(new Double[0]);
+        Double[] oddArray = oddNumbers.toArray(new Double[0]);
+        Arrays.sort(evenArray);
+        Arrays.sort(oddArray);
+
+        assertArrayEquals(new Double[]{2.0, 4.0}, evenArray);
+        assertArrayEquals(new Double[]{1.5, 3.7, 5.1}, oddArray);
+
     }
 
     @Test
@@ -159,8 +178,13 @@ class SortingArrayTest {
 
         assertEquals(3, positiveNumbers.size()); // 0 is treated as positive
         assertEquals(2, negativeNumbers.size());
-        assertTrue(positiveNumbers.containsAll(Arrays.asList(0, 3, 7)));
-        assertTrue(negativeNumbers.containsAll(Arrays.asList(-5, -2)));
+        Integer[] positiveArray = positiveNumbers.toArray(new Integer[0]);
+        Integer[] negativeArray = negativeNumbers.toArray(new Integer[0]);
+        Arrays.sort(positiveArray);
+        Arrays.sort(negativeArray);
+
+        assertArrayEquals(new Integer[]{0, 3, 7}, positiveArray);
+        assertArrayEquals(new Integer[]{-5, -2}, negativeArray);
     }
 
     @Test
@@ -174,8 +198,13 @@ class SortingArrayTest {
 
         assertEquals(3, positiveNumbers.size()); // 0.0 is treated as positive
         assertEquals(2, negativeNumbers.size());
-        assertTrue(positiveNumbers.containsAll(Arrays.asList(0.0, 2.8, 5.1)));
-        assertTrue(negativeNumbers.containsAll(Arrays.asList(-3.5, -1.2)));
+        Double[] positiveArray = positiveNumbers.toArray(new Double[0]);
+        Double[] negativeArray = negativeNumbers.toArray(new Double[0]);
+        Arrays.sort(positiveArray);
+        Arrays.sort(negativeArray);
+
+        assertArrayEquals(new Double[]{0.0, 2.8, 5.1}, positiveArray);
+        assertArrayEquals(new Double[]{-3.5, -1.2}, negativeArray);
     }
 
     @Test

@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.Arrays;
+
 class RecursiveSumArrayTest {
 
     @Test
@@ -87,9 +89,7 @@ class RecursiveSumArrayTest {
     @DisplayName("Test large array performance")
     void testLargeArray() {
         int[] array = new int[1000];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = 1;
-        }
+        Arrays.fill(array, 1);
         assertEquals(1000, RecursiveSumArray.findSum(array, 1000));
     }
 

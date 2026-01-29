@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.Arrays;
+
 class DoubleSumArrayTest {
 
     @Test
@@ -73,36 +75,28 @@ class DoubleSumArrayTest {
     @DisplayName("Test empty array - should throw exception")
     void testEmptyArray() {
         double[] array = {};
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            DoubleSumArray.findSum(array, 0);
-        });
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> DoubleSumArray.findSum(array, 0));
     }
 
     @Test
     @DisplayName("Test length greater than array size")
     void testLengthGreaterThanArray() {
         double[] array = {1.0, 2.0};
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            DoubleSumArray.findSum(array, 3);
-        });
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> DoubleSumArray.findSum(array, 3));
     }
 
     @Test
     @DisplayName("Test negative length")
     void testNegativeLength() {
         double[] array = {1.0, 2.0, 3.0};
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            DoubleSumArray.findSum(array, -1);
-        });
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> DoubleSumArray.findSum(array, -1));
     }
 
     @Test
     @DisplayName("Test large array performance")
     void testLargeArray() {
         double[] array = new double[1000];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = 1.0;
-        }
+        Arrays.fill(array, 1.0);
         assertEquals(1000.0, DoubleSumArray.findSum(array, 1000));
     }
 }
