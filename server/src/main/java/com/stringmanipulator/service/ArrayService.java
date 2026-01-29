@@ -132,48 +132,41 @@ public class ArrayService {
         }
     }
 
+    // Final practical solution - minimal duplication, maximum type safety
     private SeparationResult<Integer> handleSeparation(int[] array, String separationType) {
-        ArrayList<Integer> evenNumbers = new ArrayList<>();
-        ArrayList<Integer> oddNumbers = new ArrayList<>();
-        ArrayList<Integer> positiveNumbers = new ArrayList<>();
-        ArrayList<Integer> negativeNumbers = new ArrayList<>();
+        ArrayList<Integer> first = new ArrayList<>();
+        ArrayList<Integer> second = new ArrayList<>();
 
-        if ("parity".equals(separationType)) {
+        SeparationResult.SeparationType type = SeparationResult.SeparationType.fromString(separationType);
 
-            SortingArray.separateEvenAndOdd(array, evenNumbers, oddNumbers);
-            return new SeparationResult<>(evenNumbers, oddNumbers, "parity");
-
-        } else if ("sign".equals(separationType)) {
-
-            SortingArray.separatePositiveAndNegative(array, positiveNumbers, negativeNumbers);
-            return new SeparationResult<>(positiveNumbers, negativeNumbers, "sign");
-
-        } else {
-            throw new IllegalArgumentException("Separation must be 'sign'/'s' or 'parity'/'p'");
+        switch (type) {
+            case PARITY:
+                SortingArray.separateEvenAndOdd(array, first, second);
+                break;
+            case SIGN:
+                SortingArray.separatePositiveAndNegative(array, first, second);
+                break;
         }
+
+        return new SeparationResult<>(first, second, type);
     }
 
     private SeparationResult<Double> handleSeparation(double[] array, String separationType) {
-        ArrayList<Double> evenNumbers = new ArrayList<>();
-        ArrayList<Double> oddNumbers = new ArrayList<>();
-        ArrayList<Double> positiveNumbers = new ArrayList<>();
-        ArrayList<Double> negativeNumbers = new ArrayList<>();
+        ArrayList<Double> first = new ArrayList<>();
+        ArrayList<Double> second = new ArrayList<>();
 
-        //overcomplicated but work (prob), prevent duplicate code, it functions the same as the int version
-        if ("parity".equals(separationType)) {
+        SeparationResult.SeparationType type = SeparationResult.SeparationType.fromString(separationType);
 
-            SortingArray.separateEvenAndOdd(array, evenNumbers, oddNumbers);
-            return new SeparationResult<>(evenNumbers, oddNumbers, "parity");
-
-        } else if ("sign".equals(separationType)) {
-
-            SortingArray.separatePositiveAndNegative(array, positiveNumbers, negativeNumbers);
-            return new SeparationResult<>(positiveNumbers, negativeNumbers, "sign");
-
-        } else {
-            throw new RuntimeException("Separation cannot be performed");
+        switch (type) {
+            case PARITY:
+                SortingArray.separateEvenAndOdd(array, first, second);
+                break;
+            case SIGN:
+                SortingArray.separatePositiveAndNegative(array, first, second);
+                break;
         }
 
+        return new SeparationResult<>(first, second, type);
     }
 
     /**************************************************************************/

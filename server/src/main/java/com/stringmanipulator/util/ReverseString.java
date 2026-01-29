@@ -3,14 +3,19 @@ package com.stringmanipulator.util;
 /* @author Joe Nguyen */
 
 public class ReverseString {
-    //Recursive function that reverses a string
+
     public static String reverse(String str) {
-        //If the string is null or consists of single character, then output the entered string 
-        if (str.length() <= 1)
-            return str;
-        else {
-            //Call the function recursively to reverse the string
-            return str.charAt(str.length() - 1) + reverse(str.substring(0, str.length() - 1));
+        // Use code points to properly handle Unicode characters (including emoji)
+        int[] codePoints = str.codePoints().toArray();
+
+        // Reverse the code points
+        for (int i = 0; i < codePoints.length / 2; i++) {
+            int temp = codePoints[i];
+            codePoints[i] = codePoints[codePoints.length - 1 - i];
+            codePoints[codePoints.length - 1 - i] = temp;
         }
+
+        // Convert back to String
+        return new String(codePoints, 0, codePoints.length);
     }
 }

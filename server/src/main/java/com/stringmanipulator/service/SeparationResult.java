@@ -2,44 +2,75 @@ package com.stringmanipulator.service;
 
 import java.util.ArrayList;
 
+// Enhanced SeparationResult with better type safety
 public class SeparationResult<T> {
     private final ArrayList<T> first;
     private final ArrayList<T> second;
-    private final String separationType;
+    private final SeparationType separationType;
 
-    public SeparationResult(ArrayList<T> first, ArrayList<T> second, String separationType) {
+    public enum SeparationType {
+        PARITY("parity"),
+        SIGN("sign");
+
+        private final String value;
+
+        SeparationType(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static SeparationType fromString(String value) {
+            for (SeparationType type : values()) {
+                if (type.value.equals(value)) {
+                    return type;
+                }
+            }
+            throw new IllegalArgumentException("Unknown separation type: " + value);
+        }
+    }
+
+    public SeparationResult(ArrayList<T> first, ArrayList<T> second, SeparationType separationType) {
         this.first = first;
         this.second = second;
         this.separationType = separationType;
     }
 
-    // Type-safe getters for specific separation types
-    public ArrayList<T> getPositive() {
-        return "sign".equals(separationType) ? first : null;
-    }
-
-    public ArrayList<T> getNegative() {
-        return "sign".equals(separationType) ? second : null;
-    }
-
+    // Type-safe getters with proper validation
     public ArrayList<T> getEven() {
-        return "parity".equals(separationType) ? first : null;
-    }
-
-    public ArrayList<T> getOdd() {
-        return "parity".equals(separationType) ? second : null;
-    }
-
-    // Generic getters
-    public ArrayList<T> getFirst() {
+        validateSeparationType(SeparationType.PARITY);
         return first;
     }
 
-    public ArrayList<T> getSecond() {
+    public ArrayList<T> getOdd() {
+        validateSeparationType(SeparationType.PARITY);
         return second;
     }
 
-    public String getSeparationType() {
-        return separationType;
+    public ArrayList<T> getPositive() {
+        validateSeparationType(SeparationType.SIGN);
+        return first;
     }
+
+    public ArrayList<T> getNegative() {
+        validateSeparationType(SeparationType.SIGN);
+        return second;
+    }
+
+    private void validateSeparationType(SeparationType expectedType) {
+        if (separationType != expectedType) {
+            throw new IllegalStateException(
+                    String.format("Cannot get %s from separation type %s",
+                            expectedType.name().toLowerCase(), separationType.name().toLowerCase())
+            );
+        }
+    }
+
+    // Generic getters
+    public ArrayList<T> getFirst() { return first; }
+    public ArrayList<T> getSecond() { return second; }
+    public SeparationType getSeparationType() { return separationType; }
 }
+

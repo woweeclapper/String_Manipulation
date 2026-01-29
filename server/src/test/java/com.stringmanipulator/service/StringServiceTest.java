@@ -53,8 +53,8 @@ class StringServiceTest {
     @Test
     @DisplayName("reverseString - control characters are removed")
     void reverseString_WithControlCharacters_RemovesControlCharacters() {
-        assertEquals("test", stringService.reverseString("t\0e\1s\2t"));
-        assertEquals("test", stringService.reverseString("t\r\ne\tt")); // Should keep these
+        assertEquals("tset", stringService.reverseString("t\0e\1s\2t"));;
+        assertEquals("t\te\n\r t", stringService.reverseString("t\r\ne\tt"));// Should keep these
     }
 
     @Test
@@ -259,7 +259,7 @@ class StringServiceTest {
         String shifted = stringService.shiftString(reversed, 2, "left");
 
         assertEquals("olleh", reversed);
-        assertEquals("lehlo", shifted);
+        assertEquals("lehol", shifted);
     }
 
     @Test

@@ -20,7 +20,7 @@ public class SortingArray {
         int last = sortedArray.length - 1;
         int middle = sortedArray.length / 2;
 
-        for (int i = 0; i <= middle; i++) {
+        for (int i = 0; i < middle; i++) {
             int temp = sortedArray[i];
             sortedArray[i] = sortedArray[last - i];
             sortedArray[last - i] = temp;
@@ -40,7 +40,7 @@ public class SortingArray {
         int last = sortedArray.length - 1;
         int middle = sortedArray.length / 2;
 
-        for (int i = 0; i <= middle; i++) {
+        for (int i = 0; i < middle; i++) {
             double temp = sortedArray[i];
             sortedArray[i] = sortedArray[last - i];
             sortedArray[last - i] = temp;

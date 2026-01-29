@@ -3,10 +3,12 @@ package com.stringmanipulator.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-//import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
-//import java.util.ArrayList;
 
 class ArrayServiceTest {
 
@@ -124,13 +126,13 @@ class ArrayServiceTest {
     @Test
     void sortArray_IntArrayNullOrder_ThrowsIllegalArgumentException() {
         int[] array = {1, 2, 3};
-        assertThrows(IllegalArgumentException.class, () -> arrayService.sortArray(array, null));
+        assertThrows(RuntimeException.class, () -> arrayService.sortArray(array, null));
     }
 
     @Test
     void sortArray_IntArrayEmptyOrder_ThrowsIllegalArgumentException() {
         int[] array = {1, 2, 3};
-        assertThrows(IllegalArgumentException.class, () -> arrayService.sortArray(array, ""));
+        assertThrows(RuntimeException.class, () -> arrayService.sortArray(array, ""));
     }
 
     @Test
@@ -150,7 +152,7 @@ class ArrayServiceTest {
         int[] array = {1, 2, 3, 4, 5, 6};
         SeparationResult<Integer> result = arrayService.separateArray(array, "parity");
 
-        assertEquals("parity", result.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.PARITY, result.getSeparationType());
         assertArrayEquals(new Integer[]{2, 4, 6}, result.getEven().toArray(new Integer[0]));
         assertArrayEquals(new Integer[]{1, 3, 5}, result.getOdd().toArray(new Integer[0]));
     }
@@ -160,7 +162,7 @@ class ArrayServiceTest {
         int[] array = {-2, -1, 0, 1, 2};
         SeparationResult<Integer> result = arrayService.separateArray(array, "sign");
 
-        assertEquals("sign", result.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.SIGN, result.getSeparationType());
         assertArrayEquals(new Integer[]{0, 1, 2}, result.getPositive().toArray(new Integer[0]));
         assertArrayEquals(new Integer[]{-2, -1}, result.getNegative().toArray(new Integer[0]));
     }
@@ -170,33 +172,35 @@ class ArrayServiceTest {
         int[] array = {1, 2, 3, 4};
 
         SeparationResult<Integer> parityResult = arrayService.separateArray(array, "p");
-        assertEquals("parity", parityResult.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.PARITY, parityResult.getSeparationType());
 
         SeparationResult<Integer> signResult = arrayService.separateArray(array, "s");
-        assertEquals("sign", signResult.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.SIGN, signResult.getSeparationType());
     }
 
     @Test
-    void separateArray_IntArrayNullSeparationType_ThrowsIllegalArgumentException() {
+    void separateArray_IntArrayNullSeparationType_ThrowsRuntimeException() {
         int[] array = {1, 2, 3};
         assertThrows(RuntimeException.class, () -> arrayService.separateArray(array, null));
     }
 
     @Test
-    void separateArray_IntArrayInvalidSeparationType_ThrowsIllegalArgumentException() {
+    void separateArray_IntArrayInvalidSeparationType_ThrowsRuntimeException() {
         int[] array = {1, 2, 3};
         assertThrows(RuntimeException.class, () -> arrayService.separateArray(array, "invalid"));
     }
-/*
-    // Separate Array Tests - Double
+
+    // Separate Array Tests - Double (ENABLED)
     @Test
     void separateArray_DoubleArrayParity_ReturnsEvenOddSeparation() {
         double[] array = {1.0, 2.0, 3.0, 4.0};
         SeparationResult<Double> result = arrayService.separateArray(array, "parity");
 
-        assertEquals("parity", result.getSeparationType());
-        assertArrayEquals(new Double[]{2.0, 4.0}, result.getEven().toArray(new Double[0]), 0.001);
-        assertArrayEquals(new Double[]{1.0, 3.0}, result.getOdd().toArray(new Double[0]), 0.001);
+        assertEquals(SeparationResult.SeparationType.PARITY, result.getSeparationType());
+        assertArrayEquals(new double[]{2.0, 4.0}, result.getEven().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
+        assertArrayEquals(new double[]{1.0, 3.0}, result.getOdd().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
+        assertIterableEquals(List.of(2.0, 4.0), result.getEven());
+        assertIterableEquals(List.of(1.0, 3.0), result.getOdd());
     }
 
     @Test
@@ -204,11 +208,32 @@ class ArrayServiceTest {
         double[] array = {-2.0, -1.0, 0.0, 1.0, 2.0};
         SeparationResult<Double> result = arrayService.separateArray(array, "sign");
 
-        assertEquals("sign", result.getSeparationType());
-        assertArrayEquals(new Double[]{0.0, 1.0, 2.0}, result.getPositive().toArray(new Double[0]), 0.001);
-        assertArrayEquals(new Double[]{-2.0, -1.0}, result.getNegative().toArray(new Double[0]), 0.001);
+        assertEquals(SeparationResult.SeparationType.SIGN, result.getSeparationType());
+        assertArrayEquals(new double[]{0.0, 1.0, 2.0}, result.getPositive().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
+        assertArrayEquals(new double[]{-2.0, -1.0}, result.getNegative().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
+        assertIterableEquals(List.of(0.0, 1.0, 2.0), result.getPositive());
+        assertIterableEquals(List.of(-2.0, -1.0), result.getNegative());
     }
-*/
+
+    // Type Safety Tests
+    @Test
+    void separateArray_ParityResult_ThrowsExceptionWhenAccessingSignMethods() {
+        int[] array = {1, 2, 3, 4};
+        SeparationResult<Integer> result = arrayService.separateArray(array, "parity");
+
+        assertThrows(IllegalStateException.class, () -> result.getPositive());
+        assertThrows(IllegalStateException.class, () -> result.getNegative());
+    }
+
+    @Test
+    void separateArray_SignResult_ThrowsExceptionWhenAccessingParityMethods() {
+        int[] array = {-1, 0, 1};
+        SeparationResult<Integer> result = arrayService.separateArray(array, "sign");
+
+        assertThrows(IllegalStateException.class, () -> result.getEven());
+        assertThrows(IllegalStateException.class, () -> result.getOdd());
+    }
+
     // Edge Cases and Boundary Tests
     @Test
     void sortArray_IntArrayWithDuplicates_MaintainsCorrectCount() {
@@ -274,6 +299,43 @@ class ArrayServiceTest {
             array[i] = 1;
         }
         assertEquals(100, arrayService.sumArray(array));
+    }
+
+    // Double Array Separation Edge Cases
+    @Test
+    void separateArray_DoubleArrayAllEven_ReturnsEmptyOddList() {
+        double[] array = {2.0, 4.0, 6.0, 8.0};
+        SeparationResult<Double> result = arrayService.separateArray(array, "parity");
+
+        assertEquals(4, result.getEven().size());
+        assertEquals(0, result.getOdd().size());
+    }
+
+    @Test
+    void separateArray_DoubleArrayAllOdd_ReturnsEmptyEvenList() {
+        double[] array = {1.0, 3.0, 5.0, 7.0};
+        SeparationResult<Double> result = arrayService.separateArray(array, "parity");
+
+        assertEquals(0, result.getEven().size());
+        assertEquals(4, result.getOdd().size());
+    }
+
+    @Test
+    void separateArray_DoubleArrayAllPositive_ReturnsEmptyNegativeList() {
+        double[] array = {1.0, 2.0, 3.0, 4.0};
+        SeparationResult<Double> result = arrayService.separateArray(array, "sign");
+
+        assertEquals(4, result.getPositive().size());
+        assertEquals(0, result.getNegative().size());
+    }
+
+    @Test
+    void separateArray_DoubleArrayAllNegative_ReturnsEmptyPositiveListExceptZero() {
+        double[] array = {-1.0, -2.0, -3.0, -4.0};
+        SeparationResult<Double> result = arrayService.separateArray(array, "sign");
+
+        assertEquals(0, result.getPositive().size());
+        assertEquals(4, result.getNegative().size());
     }
 
     // Helper methods

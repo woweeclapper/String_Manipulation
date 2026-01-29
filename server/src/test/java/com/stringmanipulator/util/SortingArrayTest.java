@@ -285,10 +285,10 @@ class SortingArrayTest {
         double[] input = {Double.MAX_VALUE, Double.MIN_VALUE, 0.0, -1.0, 1.0};
         double[] sorted = SortingArray.sortAscending(input);
 
-        assertEquals(Double.MIN_VALUE, sorted[0]);
-        assertEquals(-1.0, sorted[1]);
-        assertEquals(0.0, sorted[2]);
-        assertEquals(1.0, sorted[3]);
-        assertEquals(Double.MAX_VALUE, sorted[4]);
+        assertEquals(-1.0, sorted[0]);           // Most negative
+        assertEquals(0.0, sorted[1]);             // Zero
+        assertEquals(Double.MIN_VALUE, sorted[2]); // Smallest positive
+        assertEquals(1.0, sorted[3]);             // Positive
+        assertEquals(Double.MAX_VALUE, sorted[4]); // Largest positive
     }
 }
