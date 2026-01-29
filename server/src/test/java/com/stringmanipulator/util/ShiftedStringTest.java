@@ -101,7 +101,7 @@ class ShiftedStringTest {
 
         // Test with accented characters
         assertEquals("ñáéíóú", ShiftedString.shifting("úñáéíó", 1, "left"));
-        assertEquals("óúñáéí", ShiftedString.shifting("úñáéíó", 2, "right"));
+        assertEquals("íóúñáé", ShiftedString.shifting("úñáéíó", 2, "right"));
 
         // Test complex Unicode sequences
         assertEquals("👨‍👩‍👧‍👦abc", ShiftedString.shifting("abc👨‍👩‍👧‍👦", 3, "left"));

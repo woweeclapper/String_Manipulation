@@ -15,7 +15,11 @@ public class ReverseString {
             codePoints[codePoints.length - 1 - i] = temp;
         }
 
-        // Convert back to String
-        return new String(codePoints, 0, codePoints.length);
+        // Convert back to String using StringBuilder for better reliability
+        StringBuilder sb = new StringBuilder();
+        for (int codePoint : codePoints) {
+            sb.appendCodePoint(codePoint);
+        }
+        return sb.toString();
     }
 }

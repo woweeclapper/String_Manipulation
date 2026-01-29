@@ -52,7 +52,7 @@ class ReverseStringTest {
     @DisplayName("Test special characters")
     void testSpecialCharacters() {
         assertEquals("!@#$", ReverseString.reverse("$#@!"));
-        assertEquals(",.;:", ReverseString.reverse(":.;,"));
+        assertEquals(",;.:", ReverseString.reverse(":.;,"));
     }
 
     @Test

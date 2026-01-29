@@ -76,9 +76,11 @@ public class StringService {
         // Remove control characters except common ones (tab, newline, carriage return)
         String sanitized = input.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
 
+        if (!sanitized.equals(input)) {
+            System.out.println("Warning: Control characters removed from input");
+        }
 
-
-        return sanitized;
+            return sanitized;
     }
 
     //validating string method
