@@ -1,7 +1,7 @@
-package com.stringmanipulator.controller;
+package com.string_manipulator.controller;
 
-import com.stringmanipulator.service.ArrayService;
-import com.stringmanipulator.service.StringService;
+import com.string_manipulator.service.ArrayService;
+import com.string_manipulator.service.StringService;
 
 
 public class ConsoleController {

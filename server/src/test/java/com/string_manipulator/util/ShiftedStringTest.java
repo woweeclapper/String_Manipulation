@@ -1,4 +1,4 @@
-package com.stringmanipulator.util;
+package com.string_manipulator.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -234,4 +234,5 @@ class ShiftedStringTest {
         // Verify the shift worked correctly
         assertEquals(largeUnicode.substring(100) + largeUnicode.substring(0, 100), result);
     }
+
 }

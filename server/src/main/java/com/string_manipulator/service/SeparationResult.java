@@ -1,4 +1,4 @@
-package com.stringmanipulator.service;
+package com.string_manipulator.service;
 
 import java.util.ArrayList;
 

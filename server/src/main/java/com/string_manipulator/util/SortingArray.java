@@ -1,4 +1,4 @@
-package com.stringmanipulator.util;
+package com.string_manipulator.util;
 
 /* @author Joe Nguyen */
 

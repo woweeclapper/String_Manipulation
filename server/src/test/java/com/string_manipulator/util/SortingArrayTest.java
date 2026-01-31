@@ -1,11 +1,10 @@
-package com.stringmanipulator.util;
+package com.string_manipulator.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
 
 class SortingArrayTest {

@@ -1,14 +1,15 @@
-package com.stringmanipulator.service;
+package com.string_manipulator.service;
 
-import com.stringmanipulator.util.ShiftedString;
-
-import static com.stringmanipulator.util.ReverseString.reverse;
+import com.string_manipulator.util.ShiftedString;
+import static com.string_manipulator.util.ReverseString.reverse;
 
 //handle inputs, errors, and calling the functions
 
+import java.util.logging.Logger;
 
 public class StringService {
 
+    Logger logger = Logger.getLogger(getClass().getName());
 
     public String reverseString(String stringToReverse) {
 
@@ -77,7 +78,7 @@ public class StringService {
         String sanitized = input.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
 
         if (!sanitized.equals(input)) {
-            System.out.println("Warning: Control characters removed from input");
+            logger.info("Warning: Control characters removed from input");
         }
 
             return sanitized;

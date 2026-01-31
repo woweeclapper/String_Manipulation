@@ -1,15 +1,17 @@
-package com.stringmanipulator.service;
+package com.string_manipulator.service;
 
-import com.stringmanipulator.util.SortingArray;
-import com.stringmanipulator.util.SumLogic.DoubleSumArray;
-import com.stringmanipulator.util.SumLogic.RecursiveSumArray;
-
+import com.string_manipulator.util.SortingArray;
+import com.string_manipulator.util.sum_logic.DoubleSumArray;
+import com.string_manipulator.util.sum_logic.RecursiveSumArray;
 import java.util.ArrayList;
 
 public class ArrayService {
     /* @author Joe Nguyen */
-    private static final int MAX_ARRAY_LENGTH = 1000;
-    private static final double MAX_NUMERIC_VALUE = Double.MAX_VALUE / 2;
+    /**
+     * This class contains methods for performing operations on arrays.
+     */
+        private static final int MAX_ARRAY_LENGTH = 1000;
+        private static final double MAX_NUMERIC_VALUE = Double.MAX_VALUE / 2;
 
     /**************************************************************************/
 

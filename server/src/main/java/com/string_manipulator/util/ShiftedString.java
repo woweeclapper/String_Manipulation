@@ -1,4 +1,4 @@
-package com.stringmanipulator.util;
+package com.string_manipulator.util;
 
 /* @author Joe Nguyen */
 
@@ -53,51 +53,51 @@ public class ShiftedString {
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
 
-            // Check for zero-width joiner (U+200D) - always indicates complex sequences
-            if (c == '\u200D') {
-                return true;
-            }
-
-            // Check for combining characters (Unicode combining diacritical marks)
-            if (c >= '\u0300' && c <= '\u036F') {
-                return true;
-            }
-
-            // Check for skin tone modifiers (U+1F3FB to U+1F3FF)
-            if (c >= '\uD83C' && i < str.length() - 1) {
-                char next = str.charAt(i + 1);
-                if (next >= '\uDFFB' && next <= '\uDFFF') {
-                    return true;
-                }
-            }
-
-            // Check for variation selectors (U+FE00 to U+FE0F)
-            if (c >= '\uFE00' && c <= '\uFE0F') {
-                return true;
-            }
-
-            // Check for multiple consecutive surrogate pairs (complex emoji sequences)
-            if (Character.isHighSurrogate(c)) {
-                // Count consecutive surrogate pairs
-                int surrogateCount = 0;
-                int j = i;
-                while (j < str.length() - 1) {
-                    char current = str.charAt(j);
-                    char next = str.charAt(j + 1);
-                    if (Character.isHighSurrogate(current) && Character.isLowSurrogate(next)) {
-                        surrogateCount++;
-                        j += 2;
-                    } else {
-                        break;
-                    }
-                }
-                // Only consider complex if we have 2+ consecutive surrogate pairs
-                if (surrogateCount >= 2) {
-                    return true;
-                }
-            }
+            if (isZeroWidthJoiner(c)) return true;
+            if (isCombiningCharacter(c)) return true;
+            if (isSkinToneModifier(str, i)) return true;
+            if (isVariationSelector(c)) return true;
+            if (hasMultipleConsecutiveSurrogates(str, i)) return true;
         }
         return false;
+    }
+
+    private static boolean isZeroWidthJoiner(char c) {
+        return c == '\u200D';
+    }
+
+    private static boolean isCombiningCharacter(char c) {
+        return c >= '\u0300' && c <= '\u036F';
+    }
+
+    private static boolean isSkinToneModifier(String str, int i) {
+        char c = str.charAt(i);
+        return c >= '\uD83C' && i < str.length() - 1 &&
+                str.charAt(i + 1) >= '\uDFFB' && str.charAt(i + 1) <= '\uDFFF';
+    }
+
+    private static boolean isVariationSelector(char c) {
+        return c >= '\uFE00' && c <= '\uFE0F';
+    }
+
+    private static boolean hasMultipleConsecutiveSurrogates(String str, int i) {
+        if (!Character.isHighSurrogate(str.charAt(i))) {
+            return false;
+        }
+
+        int surrogateCount = 0;
+        int j = i;
+        while (j < str.length() - 1) {
+            char current = str.charAt(j);
+            char next = str.charAt(j + 1);
+            if (Character.isHighSurrogate(current) && Character.isLowSurrogate(next)) {
+                surrogateCount++;
+                j += 2;
+            } else {
+                break;
+            }
+        }
+        return surrogateCount >= 2;
     }
 
     private static String shiftWithString(String response, int numOfShifts, String choice) {

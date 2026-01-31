@@ -1,4 +1,4 @@
-package com.stringmanipulator.util.SumLogic;
+package com.string_manipulator.util.sum_logic;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
