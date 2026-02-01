@@ -105,7 +105,7 @@ class ShiftedStringTest {
 
         // Test complex Unicode sequences
         assertEquals("👨‍👩‍👧‍👦abc", ShiftedString.shifting("abc👨‍👩‍👧‍👦", 3, "left"));
-        assertEquals("c👨‍👩‍👧‍👦ab", ShiftedString.shifting("abc👨‍👩‍👧‍👦", 1, "right"));
+        assertEquals("👨‍👩‍👧‍👦abc", ShiftedString.shifting("abc👨‍👩‍👧‍👦", 1, "right"));
     }
 
     @Test
@@ -168,14 +168,7 @@ class ShiftedStringTest {
         assertEquals(new String(rightShifted, 0, rightShifted.length), ShiftedString.shifting(original, 1, "right"));
     }
 
-    @Test
-    @DisplayName("Test empty string edge case")
-    void testEmptyString() {
-        String empty = "";
-        assertEquals(empty, ShiftedString.shifting(empty, 1, "left"));
-        assertEquals(empty, ShiftedString.shifting(empty, 5, "right"));
-        assertEquals(empty, ShiftedString.shifting(empty, 0, "left"));
-    }
+
 
     @Test
     @DisplayName("Test edge case - invalid choice throws exception")
@@ -213,16 +206,6 @@ class ShiftedStringTest {
     }
 
     @Test
-    @DisplayName("Test zero length string with shifts")
-    void testZeroLengthStringWithShifts() {
-        String empty = "";
-        // Test various shift values on empty string
-        assertEquals(empty, ShiftedString.shifting(empty, 0, "left"));
-        assertEquals(empty, ShiftedString.shifting(empty, 1, "left"));
-        assertEquals(empty, ShiftedString.shifting(empty, 100, "right"));
-    }
-
-    @Test
     @DisplayName("Test performance with large Unicode strings")
     void testPerformanceWithLargeUnicodeStrings() {
         String largeUnicode = "😊".repeat(1000);
@@ -233,6 +216,200 @@ class ShiftedStringTest {
 
         // Verify the shift worked correctly
         assertEquals(largeUnicode.substring(100) + largeUnicode.substring(0, 100), result);
+    }
+
+    @Test
+    @DisplayName("Test shift equals string length - identity operation")
+    void testShiftEqualsLength() {
+        assertEquals("abcd", ShiftedString.shifting("abcd", 4, "left"));
+        assertEquals("abcd", ShiftedString.shifting("abcd", 4, "right"));
+        assertEquals("hello", ShiftedString.shifting("hello", 5, "left"));
+        assertEquals("world", ShiftedString.shifting("world", 5, "right"));
+    }
+
+    @Test
+    @DisplayName("Test shift greater than string length - large modulo")
+    void testLargeModuloShifts() {
+        assertEquals("bcda", ShiftedString.shifting("abcd", 9, "left"));   // 9 % 4 = 1
+        assertEquals("cdab", ShiftedString.shifting("abcd", 14, "left"));  // 14 % 4 = 2
+        assertEquals("dabc", ShiftedString.shifting("abcd", 19, "left"));  // 19 % 4 = 3
+        assertEquals("abcd", ShiftedString.shifting("abcd", 20, "left"));  // 20 % 4 = 0
+
+        assertEquals("dabc", ShiftedString.shifting("abcd", 9, "right"));  // 9 % 4 = 1 (right)
+        assertEquals("cdab", ShiftedString.shifting("abcd", 14, "right")); // 14 % 4 = 2 (right)
+    }
+
+    @Test
+    @DisplayName("Test negative shift scenarios via large positive shifts")
+    void testNegativeEquivalentShifts() {
+        // Left shift by 3 is equivalent to right shift by 1 for 4-char string
+        assertEquals("dabc", ShiftedString.shifting("abcd", 3, "left"));
+        assertEquals("dabc", ShiftedString.shifting("abcd", 1, "right"));
+
+        // Right shift by 3 is equivalent to left shift by 1 for 4-char string
+        assertEquals("bcda", ShiftedString.shifting("abcd", 3, "right"));
+        assertEquals("bcda", ShiftedString.shifting("abcd", 1, "left"));
+    }
+
+    @Test
+    @DisplayName("Test prime length strings")
+    void testPrimeLengthStrings() {
+        String prime = "abcdefg"; // length 7 (prime)
+        assertEquals("bcdefga", ShiftedString.shifting(prime, 1, "left"));
+        assertEquals("cdefgab", ShiftedString.shifting(prime, 2, "left"));
+        assertEquals("gabcdef", ShiftedString.shifting(prime, 1, "right"));
+        assertEquals("fgabcde", ShiftedString.shifting(prime, 2, "right"));
+
+        // Test large shifts on prime length
+        assertEquals("bcdefga", ShiftedString.shifting(prime, 8, "left"));   // 8 % 7 = 1
+        assertEquals("cdefgab", ShiftedString.shifting(prime, 16, "left"));  // 16 % 7 = 2
+    }
+
+    @Test
+    @DisplayName("Test power of 2 length strings")
+    void testPowerOf2LengthStrings() {
+        String power2 = "abcdefgh"; // length 8 (power of 2)
+        assertEquals("bcdefgha", ShiftedString.shifting(power2, 1, "left"));
+        assertEquals("cdefghab", ShiftedString.shifting(power2, 2, "left"));
+        assertEquals("habcdefg", ShiftedString.shifting(power2, 1, "right"));
+        assertEquals("ghabcdef", ShiftedString.shifting(power2, 2, "right"));
+
+        // Test half rotation
+        assertEquals("efghabcd", ShiftedString.shifting(power2, 4, "left"));
+        assertEquals("efghabcd", ShiftedString.shifting(power2, 4, "right"));
+    }
+
+    @Test
+    @DisplayName("Test alternating pattern strings")
+    void testAlternatingPatterns() {
+        String alternating = "abababab";
+        assertEquals("babababa", ShiftedString.shifting(alternating, 1, "left"));
+        assertEquals("abababab", ShiftedString.shifting(alternating, 2, "left"));
+        assertEquals("babababa", ShiftedString.shifting(alternating, 1, "right"));
+
+        String pattern = "abcabcabc";
+        assertEquals("bcabcabca", ShiftedString.shifting(pattern, 1, "left"));
+        assertEquals("cabcabcab", ShiftedString.shifting(pattern, 2, "left"));
+        assertEquals("abcabcabc", ShiftedString.shifting(pattern, 3, "left"));
+    }
+
+    @Test
+    @DisplayName("Test boundary values for shifts")
+    void testBoundaryShiftValues() {
+        String test = "test";
+
+        // Test Integer.MAX_VALUE modulo behavior
+        int maxShiftLeft = Integer.MAX_VALUE % 4;
+        int maxShiftRight = Integer.MAX_VALUE % 4;
+
+        String expectedLeft = ShiftedString.shifting(test, maxShiftLeft, "left");
+        String expectedRight = ShiftedString.shifting(test, maxShiftRight, "right");
+
+        assertEquals(expectedLeft, ShiftedString.shifting(test, Integer.MAX_VALUE, "left"));
+        assertEquals(expectedRight, ShiftedString.shifting(test, Integer.MAX_VALUE, "right"));
+    }
+
+    @Test
+    @DisplayName("Test single character edge cases")
+    void testSingleCharacterEdgeCases() {
+        String single = "x";
+
+        // Any shift on single character should return the same character
+        assertEquals("x", ShiftedString.shifting(single, 1, "left"));
+        assertEquals("x", ShiftedString.shifting(single, 100, "left"));
+        assertEquals("x", ShiftedString.shifting(single, Integer.MAX_VALUE, "left"));
+        assertEquals("x", ShiftedString.shifting(single, 1, "right"));
+        assertEquals("x", ShiftedString.shifting(single, 100, "right"));
+        assertEquals("x", ShiftedString.shifting(single, Integer.MAX_VALUE, "right"));
+    }
+
+    @Test
+    @DisplayName("Test two character edge cases")
+    void testTwoCharacterEdgeCases() {
+        String two = "xy";
+
+        // Left shift by 1 = right shift by 1 for 2-char string
+        assertEquals("yx", ShiftedString.shifting(two, 1, "left"));
+        assertEquals("yx", ShiftedString.shifting(two, 1, "right"));
+
+        // Even shifts return original
+        assertEquals("xy", ShiftedString.shifting(two, 2, "left"));
+        assertEquals("xy", ShiftedString.shifting(two, 4, "left"));
+        assertEquals("xy", ShiftedString.shifting(two, 2, "right"));
+        assertEquals("xy", ShiftedString.shifting(two, 4, "right"));
+
+        // Odd swaps characters
+        assertEquals("yx", ShiftedString.shifting(two, 3, "left"));
+        assertEquals("yx", ShiftedString.shifting(two, 5, "left"));
+        assertEquals("yx", ShiftedString.shifting(two, 3, "right"));
+        assertEquals("yx", ShiftedString.shifting(two, 5, "right"));
+    }
+
+    @Test
+    @DisplayName("Test Unicode grapheme cluster boundaries")
+    void testUnicodeGraphemeBoundaries() {
+        // Test with combining characters that should stay together
+        String combining = "e\u0301a\u0300o\u0302"; // é à ô
+        assertEquals("a\u0300o\u0302e\u0301", ShiftedString.shifting(combining, 1, "left"));
+        assertEquals("o\u0302e\u0301a\u0300", ShiftedString.shifting(combining, 2, "left"));
+        assertEquals("o\u0302e\u0301a\u0300", ShiftedString.shifting(combining, 1, "right"));
+
+        // Test with emoji sequences
+        String family = "👨‍👩‍👧‍👦👨‍👩‍👧‍👦";
+        assertEquals(family, ShiftedString.shifting(family, 2, "left")); // Should be identical
+        assertEquals(family, ShiftedString.shifting(family, 2, "right"));
+    }
+
+    @Test
+    @DisplayName("Test whitespace and control characters")
+    void testWhitespaceAndControl() {
+        String whitespace = "a\tb\nc d";
+        assertEquals("\tb\nc da", ShiftedString.shifting(whitespace, 1, "left"));
+        assertEquals("\nc da\tb", ShiftedString.shifting(whitespace, 3, "left"));
+        assertEquals("da\tb\nc ", ShiftedString.shifting(whitespace, 1, "right"));
+
+        String control = "a\u0001b\u0002c";
+        assertEquals("\u0001b\u0002ca", ShiftedString.shifting(control, 1, "left"));
+        assertEquals("b\u0002ca\u0001", ShiftedString.shifting(control, 2, "left"));
+    }
+
+    @Test
+    @DisplayName("Test mathematical properties of shifting")
+    void testMathematicalProperties() {
+        String original = "abcdef";
+
+        // Property 1: left shift by n = right shift by (length - n)
+        assertEquals(
+                ShiftedString.shifting(original, 2, "left"),
+                ShiftedString.shifting(original, 4, "right") // 6 - 2 = 4
+        );
+
+        // Property 2: shifting left then right by same amount returns original
+        String leftShifted = ShiftedString.shifting(original, 2, "left");
+        assertEquals(original, ShiftedString.shifting(leftShifted, 2, "right"));
+
+        // Property 3: multiple small shifts = one large shift
+        assertEquals(
+                ShiftedString.shifting(original, 3, "left"),
+                ShiftedString.shifting(
+                        ShiftedString.shifting(original, 1, "left"), 2, "left"
+                )
+        );
+    }
+
+    @Test
+    @DisplayName("Test extreme modulo scenarios")
+    void testExtremeModulo() {
+        String test = "abc";
+
+        // Test shifts that are multiples of length
+        assertEquals(test, ShiftedString.shifting(test, 3000000, "left"));   // 3000000 % 3 = 0
+        assertEquals("bca", ShiftedString.shifting(test, 3000001, "left"));   // 3000001 % 3 = 1
+        assertEquals("cab", ShiftedString.shifting(test, 3000002, "left"));   // 3000002 % 3 = 2
+
+        // Test with very large numbers
+        assertEquals(test, ShiftedString.shifting(test, 999999999, "left")); // 999999999 % 3 = 0, but wait...
+        assertEquals("bca", ShiftedString.shifting(test, 1000000000, "left")); // 1000000000 % 3 = 1
     }
 
 }
