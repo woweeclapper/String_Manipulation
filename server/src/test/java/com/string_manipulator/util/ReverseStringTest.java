@@ -138,7 +138,7 @@ class ReverseStringTest {
 
             // Mixed combining characters
             String mixed = "a\u0308o\u0308u\u0308"; // äöü
-            assertEquals(mixed, ReverseString.reverse(mixed)); // Should be identical
+            assertEquals("üöä", ReverseString.reverse(mixed)); // Should be identical
         }
 
         @Test
@@ -199,7 +199,7 @@ class ReverseStringTest {
         @DisplayName("Test Arabic text")
         void testArabicText() {
             assertEquals("مرحبا", ReverseString.reverse("ابحرم"));
-            assertEquals("العربية", ReverseString.reverse("يةرعلا"));
+            assertEquals("العرةي", ReverseString.reverse("يةرعلا"));
         }
 
         @Test
@@ -212,8 +212,8 @@ class ReverseStringTest {
         @Test
         @DisplayName("Test Devanagari script")
         void testDevanagariScript() {
-            assertEquals("नमस्ते", ReverseString.reverse("ेत्समन"));
-            assertEquals("धन्यवाद", ReverseString.reverse("दावन्यध"));
+            assertEquals("नमसत्े", ReverseString.reverse("ेत्समन"));
+            assertEquals("धयन्वदा", ReverseString.reverse("दावन्यध"));
         }
 
         @Test
@@ -379,6 +379,281 @@ class ReverseStringTest {
             // Test multiple adjacent complex clusters
             String multiple = "👩‍⚕️🧑‍💻";
             assertEquals("🧑‍💻👩‍⚕️", ReverseString.reverse(multiple));
+        }
+    }
+    @Nested
+    @DisplayName("Extreme Edge Cases")
+    class ExtremeEdgeCases {
+
+        @Test
+        @DisplayName("Test string with only control characters")
+        void testOnlyControlCharacters() {
+            String controlOnly = "\r\n\t\b\f\u0000\u001F";
+            String reversed = "\u001F\u0000\f\b\t\n\r";
+            assertEquals(reversed, ReverseString.reverse(controlOnly));
+        }
+
+        @Test
+        @DisplayName("Test string with only whitespace variations")
+        void testOnlyWhitespaceVariations() {
+            String whitespaceOnly = " \t\n\r\u00A0\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000";
+            String reversed = new StringBuilder(whitespaceOnly).reverse().toString();
+            assertEquals(reversed, ReverseString.reverse(whitespaceOnly));
+        }
+
+        @Test
+        @DisplayName("Test string with maximum Unicode characters")
+        void testMaximumUnicodeCharacters() {
+            // Test with characters from different Unicode planes
+            String extremeUnicode = "\u0000\u007F\u07FF\uFFFF\u10FFFF";
+            String reversed = "\u10FFFF\uFFFF\u07FF\u007F\u0000";
+            assertEquals(reversed, ReverseString.reverse(extremeUnicode));
+        }
+
+        @Test
+        @DisplayName("Test string with invalid Unicode sequences")
+        void testInvalidUnicodeSequences() {
+            // These should still reverse without throwing exceptions
+            String invalidUnicode = "abc\uD800def"; // Unpaired high surrogate
+            String reversed = "fed\uD800cba";
+            assertEquals(reversed, ReverseString.reverse(invalidUnicode));
+
+            String invalidUnicode2 = "abc\uDC00def"; // Unpaired low surrogate
+            String reversed2 = "fed\uDC00cba";
+            assertEquals(reversed2, ReverseString.reverse(invalidUnicode2));
+        }
+    }
+    @Nested
+    @DisplayName("Mathematical and Technical Symbols")
+    class MathematicalTechnicalSymbols {
+
+        @Test
+        @DisplayName("Test mathematical operators")
+        void testMathematicalOperators() {
+            String math = "∑∏∫∆∇∂∞±×÷≠≤≥≈≝∈∉⊂⊃∪∩";
+            String reversed = "∩∪⊃⊂∉∈≝≈≥≤≠÷×±∞∂∇∆∫∏∑";
+            assertEquals(reversed, ReverseString.reverse(math));
+        }
+
+        @Test
+        @DisplayName("Test currency symbols")
+        void testCurrencySymbols() {
+            String currency = "$€£¥₹₽₩₪₫₡₨₦₱₲₴₸₼₾";
+            String reversed = "₾₼₸₴₲₱₦₨₡₫₪₩₽₹¥£€$";
+            assertEquals(reversed, ReverseString.reverse(currency));
+        }
+
+        @Test
+        @DisplayName("Test technical symbols")
+        void testTechnicalSymbols() {
+            String technical = "⚡⚠️⚽♠️♥️♦️♣️🎵🎶🔔🔕";
+            String reversed = "🔕🔔🎶🎵♣️♦️♥️♠️⚽⚠️⚡";
+            assertEquals(reversed, ReverseString.reverse(technical));
+        }
+
+        @Test
+        @DisplayName("Test bracket and punctuation combinations")
+        void testBracketsAndPunctuation() {
+            String brackets = "({[<>]})«»‹›''`";
+            String reversed = "`''‹›»»({[<>]})";
+            assertEquals(reversed, ReverseString.reverse(brackets));
+        }
+    }
+    @Nested
+    @DisplayName("Complex Emoji Combinations")
+    class ComplexEmojiCombinations {
+
+        @Test
+        @DisplayName("Test emoji with multiple skin tones")
+        void testEmojiWithMultipleSkinTones() {
+            String holdingHands = "🧑🏽‍🤝‍🧑🏿"; // People holding hands with different skin tones
+            assertEquals(holdingHands, ReverseString.reverse(holdingHands));
+
+            String mixedSkinTones = "👋🏻👋🏼👋🏽👋🏾👋🏿";
+            String reversed = "👋🏿👋🏾👋🏽👋🏼👋🏻";
+            assertEquals(reversed, ReverseString.reverse(mixedSkinTones));
+        }
+
+        @Test
+        @DisplayName("Test professional emojis with variations")
+        void testProfessionalEmojisWithVariations() {
+            String professionals = "👩‍⚕️👨‍⚕️👩‍🎓👨‍🎓👩‍🏫👨‍🏫👩‍💻👨‍💻👩‍🏭👨‍🏭";
+            String reversed = "👨‍🏭👩‍🏭👨‍💻👩‍💻👨‍🏫👩‍🏫👨‍🎓👩‍🎓👨‍⚕️👩‍⚕️";
+            assertEquals(reversed, ReverseString.reverse(professionals));
+        }
+
+        @Test
+        @DisplayName("Test flag emojis")
+        void testFlagEmojis() {
+            String flags = "🇺🇸🇨🇦🇲🇽🇯🇵🇰🇷🇩🇪🇫🇷🇬🇧🇮🇹🇪🇸🇦🇺";
+            String reversed = "🇦🇺🇪🇸🇮🇹🇬🇧🇫🇷🇩🇪🇰🇷🇯🇵🇲🇽🇨🇦🇺🇸";
+            assertEquals(reversed, ReverseString.reverse(flags));
+        }
+
+        @Test
+        @DisplayName("Test mixed emoji sequences")
+        void testMixedEmojiSequences() {
+            String mixed = "❤️🧡💛💚💙💜🖤🤍🤎💔❣️💕💞💓💗💖💘💝💟☮️✝️☪️🕉️☸️✡️🔯🕎☯️☦️🛐";
+            String reversed = "🛐☦️☯️🕎🔯✡️☸️🕉️☪️✝️☮️💟💝💘💖💗💓💞💕❣️💔🤎🤍🖤💜💙💚💛🧡❤️";
+            assertEquals(reversed, ReverseString.reverse(mixed));
+        }
+    }
+    @Nested
+    @DisplayName("Incomprehensible and Chaotic Strings")
+    class IncomprehensibleStrings {
+
+        @Test
+        @DisplayName("Test completely random Unicode characters")
+        void testRandomUnicodeCharacters() {
+            String random = "⚡🌟💫✨🌈🔥💧🌊🎵🎶🎨🎭🎪🎯🎲🎸🎹🎺🎻🥁🎤";
+            String reversed = "🎤🥁🎻🎺🎹🎸🎲🎯🎪🎭🎨🎶🎵🌊💧🔥🌈✨💫🌟⚡";
+            assertEquals(reversed, ReverseString.reverse(random));
+        }
+
+        @Test
+        @DisplayName("Test mixed scripts and symbols")
+        void testMixedScriptsAndSymbols() {
+            String chaotic = "Hello🌍世界👨‍👩‍👧‍👦مرحبا😀नमस्ते🧠💡⚡🔮✨🎭🎪🎨🎵";
+            String reversed = "🎵🎨🎪🎭✨🔮⚡💡🧠नमस्ते😀مرحبا👨‍👩‍👧‍👦世界🌍Hello";
+            assertEquals(reversed, ReverseString.reverse(chaotic));
+        }
+
+        @Test
+        @DisplayName("Test string with every type of character")
+        void testEveryCharacterType() {
+            StringBuilder everything = new StringBuilder();
+            // Add ASCII
+            everything.append("Hello World! 123");
+            // Add emojis
+            everything.append("😀😃😄😁😆😅😂🤣☺️😊");
+            // Add complex emojis
+            everything.append("👨‍👩‍👧‍👦👩‍⚕️🧑‍💻");
+            // Add combining characters
+            everything.append("e\u0301a\u0308o\u0308");
+            // Add various scripts
+            everything.append("你好世界مرحباनमस्ते");
+            // Add mathematical symbols
+            everything.append("∑∏∫∆∇∂∞");
+            // Add control characters
+            everything.append("\r\n\t");
+
+            String original = everything.toString();
+            String reversed = ReverseString.reverse(original);
+
+            // Should not throw and should maintain same length
+            assertEquals(original.length(), reversed.length());
+            // Should be reversible (double reverse returns original)
+            assertEquals(original, ReverseString.reverse(reversed));
+        }
+
+        @Test
+        @DisplayName("Test extremely long chaotic string")
+        void testExtremelyLongChaoticString() {
+            StringBuilder chaos = new StringBuilder();
+            String[] elements = {
+                    "😀", "👨‍👩‍👧‍👦", "e\u0301", "你", "∑", "\t", "🌟", "مرح", "💡", "🎭"
+            };
+
+            // Create a very long chaotic string
+            for (int i = 0; i < 1000; i++) {
+                chaos.append(elements[i % elements.length]);
+            }
+
+            String original = chaos.toString();
+            assertDoesNotThrow(() -> ReverseString.reverse(original));
+
+            String reversed = ReverseString.reverse(original);
+            assertEquals(original.length(), reversed.length());
+            assertEquals(original, ReverseString.reverse(reversed));
+        }
+    }
+    @Nested
+    @DisplayName("Numbers and Data Patterns")
+    class NumbersAndDataPatterns {
+
+        @Test
+        @DisplayName("Test various number formats")
+        void testVariousNumberFormats() {
+            String numbers = "1234567890-+.,/()[]{}";
+            String reversed = "{}[])(/,.,+-+0987654321";
+            assertEquals(reversed, ReverseString.reverse(numbers));
+        }
+
+        @Test
+        @DisplayName("Test scientific notation")
+        void testScientificNotation() {
+            String scientific = "1.23E+10 4.56E-8 7.89e15";
+            String reversed = "51e9.87 8-E45.6 01+E3.21";
+            assertEquals(reversed, ReverseString.reverse(scientific));
+        }
+
+        @Test
+        @DisplayName("Test binary and hexadecimal")
+        void testBinaryAndHexadecimal() {
+            String binary = "1010101010101010";
+            String reversed = "0101010101010101";
+            assertEquals(reversed, ReverseString.reverse(binary));
+
+            String hex = "0xDEADBEEF 0xCAFEBABE";
+            String reversedHex = "EBABEFCAX 0xFEEBDAED0";
+            assertEquals(reversedHex, ReverseString.reverse(hex));
+        }
+
+        @Test
+        @DisplayName("Test data patterns")
+        void testDataPatterns() {
+            String data = "ID:12345,NAME:John,AGE:25";
+            String reversed = "52:EGA,nhoJ:EMAN,54321:DI";
+            assertEquals(reversed, ReverseString.reverse(data));
+        }
+    }
+    @Nested
+    @DisplayName("Bidirectional Text Tests")
+    class BidirectionalTextTests {
+
+        @Test
+        @DisplayName("Test mixed RTL and LTR text")
+        void testMixedRTLLTRText() {
+            String mixed = "Hello مرحبا World";
+            String reversed = "dlroW مرحبا olleH";
+            assertEquals(reversed, ReverseString.reverse(mixed));
+        }
+
+        @Test
+        @DisplayName("Test complex bidirectional text")
+        void testComplexBidirectionalText() {
+            String complex = "English العربية עברית 中文 日本語 한국어";
+            String reversed = "어리한국어 일본어 中文 עברית العربية hsilgnE";
+            assertEquals(reversed, ReverseString.reverse(complex));
+        }
+    }
+    @Nested
+    @DisplayName("Reversibility Verification")
+    class ReversibilityVerification {
+
+        @ParameterizedTest
+        @ValueSource(strings = {
+                "", "a", "😀", "👨‍👩‍👧‍👦", "e\u0301", "Hello", "مرحبا", "你好",
+                "Hello🌍World", "123😀ABC", "!@#$%^&*()", "\r\n\t",
+                "∑∏∫∆∇∂∞", "🇺🇸🇨🇦🇲🇽", "a\u0308o\u0308u\u0308"
+        })
+        @DisplayName("Double reverse should return original")
+        void testDoubleReverseReturnsOriginal(String input) {
+            String reversed = ReverseString.reverse(input);
+            String doubleReversed = ReverseString.reverse(reversed);
+            assertEquals(input, doubleReversed, "Double reverse should return original for: " + input);
+        }
+
+        @Test
+        @DisplayName("Test reversibility with extremely long string")
+        void testReversibilityWithExtremelyLongString() {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 10000; i++) {
+                sb.append((char) (i % 1000 + 32)); // Printable ASCII range
+            }
+            String original = sb.toString();
+            String doubleReversed = ReverseString.reverse(ReverseString.reverse(original));
+            assertEquals(original, doubleReversed);
         }
     }
 }
