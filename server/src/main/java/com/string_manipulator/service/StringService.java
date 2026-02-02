@@ -86,7 +86,7 @@ public class StringService {
     //validating string method
     private void validateString(String input) {
 
-        final int MAX_LENGTH = 1000;
+
         if (input == null) {
             throw new IllegalArgumentException("String cannot by null");
         }
@@ -96,10 +96,7 @@ public class StringService {
         if (input.trim().isEmpty()) {
             throw new IllegalArgumentException("String cannot contain only whitespace");
         }
-        if (input.length() > MAX_LENGTH) {
-            throw new IllegalArgumentException("String exceeds maximum length of " + MAX_LENGTH + " characters. "
-                    + "Provided length: " + input.length());
-        }
+
     }
 
 }
