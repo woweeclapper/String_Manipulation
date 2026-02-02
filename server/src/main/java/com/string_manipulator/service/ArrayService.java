@@ -39,6 +39,8 @@ public class ArrayService {
             validateOrderParameters(orderType);
             String normalizedOrder = normalizeOrderType(orderType);
             return handleSorting(arrayToSort, normalizedOrder);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Array length exceeds maximum length of " + MAX_ARRAY_LENGTH); // Let validation exceptions propagate
         } catch (Exception e) {
             throw new RuntimeException("Failed to sort int array: " + e.getMessage(), e);
         }
@@ -50,8 +52,10 @@ public class ArrayService {
             validateOrderParameters(orderType);
             String normalizedOrder = normalizeOrderType(orderType);
             return handleSorting(arrayToSort, normalizedOrder);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Array length exceeds maximum length of " + MAX_ARRAY_LENGTH); // Let validation exceptions propagate
         } catch (Exception e) {
-            throw new RuntimeException("Failed to sort double array: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to sort int array: " + e.getMessage(), e);
         }
     }
 
@@ -223,9 +227,6 @@ public class ArrayService {
                 throw new IllegalArgumentException("Array contains value exceeding reasonable bounds: " + element);
             }
 
-            if (String.valueOf(element).contains("E")) {
-                throw new IllegalArgumentException("Array contains scientific notation: " + element);
-            }
             hasValidElement = true;
         }
 

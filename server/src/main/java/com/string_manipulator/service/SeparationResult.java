@@ -1,6 +1,8 @@
 package com.string_manipulator.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 // Enhanced SeparationResult with better type safety
 public class SeparationResult<T> {
@@ -39,24 +41,24 @@ public class SeparationResult<T> {
     }
 
     // Type-safe getters with proper validation
-    public ArrayList<T> getEven() {
+    public List<T> getEven() {
         validateSeparationType(SeparationType.PARITY);
-        return first;
+        return Collections.unmodifiableList(first);
     }
 
-    public ArrayList<T> getOdd() {
+    public List<T> getOdd() {
         validateSeparationType(SeparationType.PARITY);
-        return second;
+        return Collections.unmodifiableList(second);
     }
 
-    public ArrayList<T> getPositive() {
+    public List<T> getPositive() {
         validateSeparationType(SeparationType.SIGN);
-        return first;
+        return Collections.unmodifiableList(first);
     }
 
-    public ArrayList<T> getNegative() {
+    public List<T> getNegative() {
         validateSeparationType(SeparationType.SIGN);
-        return second;
+        return Collections.unmodifiableList(second);
     }
 
     private void validateSeparationType(SeparationType expectedType) {

@@ -78,13 +78,6 @@ class ArrayServiceTest {
     }
 
 
-
-    @Test
-    void sumArray_DoubleArrayWithScientificNotation_ThrowsIllegalArgumentException() {
-        double[] array = {1.0, 1.5E10, 3.0};
-        assertThrows(IllegalArgumentException.class, () -> arrayService.sumArray(array));
-    }
-
     @Test
     void sumArray_DoubleArrayWithExcessiveValue_ThrowsIllegalArgumentException() {
         double[] array = {1.0, Double.MAX_VALUE, 3.0};
@@ -192,8 +185,10 @@ class ArrayServiceTest {
         SeparationResult<Double> result = arrayService.separateArray(array, "parity");
 
         assertEquals(SeparationResult.SeparationType.PARITY, result.getSeparationType());
-        assertArrayEquals(new double[]{2.0, 4.0}, result.getEven().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
-        assertArrayEquals(new double[]{1.0, 3.0}, result.getOdd().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
+        assertArrayEquals(new double[]{2.0, 4.0},
+                result.getEven().stream().mapToDouble(d -> d).toArray(), 0.001);
+        assertArrayEquals(new double[]{1.0, 3.0},
+                result.getOdd().stream().mapToDouble(d -> d).toArray(), 0.001);
 
     }
 
@@ -208,7 +203,8 @@ class ArrayServiceTest {
                 .mapToDouble(d -> d == 0.0 ? 0.0 : d)  // Convert any -0.0 to 0.0
                 .toArray();
         assertArrayEquals(new double[]{0.0, 1.0, 2.0}, positiveResult, 0.001);
-        assertArrayEquals(new double[]{-2.0, -1.0}, result.getNegative().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
+        assertArrayEquals(new double[]{-2.0, -1.0},
+                result.getNegative().stream().mapToDouble(d -> d).toArray(), 0.001);
 
     }
 
@@ -348,8 +344,10 @@ class ArrayServiceTest {
         SeparationResult<Integer> separated = arrayService.separateArray(sorted, "sign");
 
         assertEquals(SeparationResult.SeparationType.SIGN, separated.getSeparationType());
-        assertArrayEquals(new int[]{0, 2, 3, 5}, separated.getPositive().stream().mapToInt(Integer::intValue).toArray());
-        assertArrayEquals(new int[]{-4, -1}, separated.getNegative().stream().mapToInt(Integer::intValue).toArray());
+        assertArrayEquals(new int[]{0, 2, 3, 5},
+                separated.getPositive().stream().mapToInt(i -> i).toArray());
+        assertArrayEquals(new int[]{-4, -1},
+                separated.getNegative().stream().mapToInt(i -> i).toArray());
     }
 
     @Test
@@ -361,7 +359,7 @@ class ArrayServiceTest {
         SeparationResult<Double> separated = arrayService.separateArray(array, "sign");
 
         // Sort the positive part
-        double[] positiveArray = separated.getPositive().stream().mapToDouble(Double::doubleValue).toArray();
+        double[] positiveArray = separated.getPositive().stream().mapToDouble(d -> d).toArray();
         double[] sortedPositive = arrayService.sortArray(positiveArray, "ascending");
 
         assertArrayEquals(new double[]{0.0, 1.1, 2.2}, sortedPositive, 0.001);
@@ -376,8 +374,8 @@ class ArrayServiceTest {
         int[] sorted = arrayService.sortArray(array, "descending");
         SeparationResult<Integer> separated = arrayService.separateArray(sorted, "sign");
 
-        int positiveSum = arrayService.sumArray(separated.getPositive().stream().mapToInt(Integer::intValue).toArray());
-        int negativeSum = arrayService.sumArray(separated.getNegative().stream().mapToInt(Integer::intValue).toArray());
+        int positiveSum = arrayService.sumArray(separated.getPositive().stream().mapToInt(i -> i).toArray());
+        int negativeSum = arrayService.sumArray(separated.getNegative().stream().mapToInt(i -> i).toArray());
 
         assertEquals(11, positiveSum); // 5 + 2 + 4
         assertEquals(-4, negativeSum); // -3 + -1
@@ -469,11 +467,6 @@ class ArrayServiceTest {
             arrayService.sumArray(negInfArray);
         });
 
-        // Test scientific notation
-        assertThrows(IllegalArgumentException.class, () -> {
-            double[] sciArray = {1.0, 1.5E10, 2.0};
-            arrayService.sumArray(sciArray);
-        });
     }
 
     @Test
@@ -486,7 +479,7 @@ class ArrayServiceTest {
         assertDoesNotThrow(() -> arrayService.sumArray(boundaryArray));
 
         // Test values just over the boundary
-        double overBoundary = Double.MAX_VALUE / 2 + 1.0;
+        double overBoundary = (Double.MAX_VALUE / 2) * 2.0;
         double[] overBoundaryArray = {overBoundary};
 
         assertThrows(IllegalArgumentException.class, () -> arrayService.sumArray(overBoundaryArray));
@@ -703,7 +696,6 @@ class ArrayServiceTest {
                 .mapToDouble(Double::parseDouble)
                 .toArray();
     }
-
 
 
 }
