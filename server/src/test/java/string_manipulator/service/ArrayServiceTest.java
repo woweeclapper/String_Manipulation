@@ -206,7 +206,11 @@ class ArrayServiceTest {
         SeparationResult<Double> result = arrayService.separateArray(array, "sign");
 
         assertEquals(SeparationResult.SeparationType.SIGN, result.getSeparationType());
-        assertArrayEquals(new double[]{0.0, 1.0, 2.0}, result.getPositive().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
+        // Convert -0.0 to 0.0 for comparison
+        double[] positiveResult = result.getPositive().stream()
+                .mapToDouble(d -> d == 0.0 ? 0.0 : d)  // Convert any -0.0 to 0.0
+                .toArray();
+        assertArrayEquals(new double[]{0.0, 1.0, 2.0}, positiveResult, 0.001);
         assertArrayEquals(new double[]{-2.0, -1.0}, result.getNegative().stream().mapToDouble(Double::doubleValue).toArray(), 0.001);
 
     }

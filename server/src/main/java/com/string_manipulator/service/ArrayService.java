@@ -214,15 +214,15 @@ public class ArrayService {
             if (Double.isNaN(element)) {
                 throw new IllegalArgumentException("Array contains NaN value");
             }
+
             if (Double.isInfinite(element)) {
                 throw new IllegalArgumentException("Array contains infinite value");
             }
-            if (element == -0.0) {
-                throw new IllegalArgumentException("Array contains negative zero");
-            }
+
             if (Math.abs(element) > MAX_NUMERIC_VALUE) {
                 throw new IllegalArgumentException("Array contains value exceeding reasonable bounds: " + element);
             }
+
             if (String.valueOf(element).contains("E")) {
                 throw new IllegalArgumentException("Array contains scientific notation: " + element);
             }

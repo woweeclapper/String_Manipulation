@@ -20,7 +20,6 @@ public class StringService {
         String sanitizedInput = sanitizeStringInput(stringToReverse);
         return reverse(sanitizedInput);
     }
-
     /**************************************************************************/
 
     public String shiftString(String stringToShift, int shifts, String direction) {
@@ -102,7 +101,6 @@ public class StringService {
                     + "Provided length: " + input.length());
         }
     }
-
 
 }
 
