@@ -10,11 +10,11 @@ Small amount of input validations was implemented, but it was merely a final pro
 
 - Update from Java 14 to Java 25
 - Refactoring current project into a functional Backend
-- Frontend will be design in vanilla html/css/js
+- Frontend will be design in vanilla html/css/js which will also double as a portfolio website showcasing other works
 - Spring Boot will be implemented into Backend once refactoring is done
 
 ## Hosting
-- GitHub Pages for Frontend
+- GitHub Pages for Frontend 
 - Render for Backend
 - Docker is needed for Render hosting since it does not support Java
   
