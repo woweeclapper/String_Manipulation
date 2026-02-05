@@ -4,8 +4,9 @@ import com.string_manipulator.util.SortingArray;
 import com.string_manipulator.util.sum_logic.DoubleSumArray;
 import com.string_manipulator.util.sum_logic.RecursiveSumArray;
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ArrayService {
     /* @author Joe Nguyen */
@@ -14,9 +15,9 @@ public class ArrayService {
      */
         private static final int MAX_ARRAY_LENGTH = 1000;
         private static final double MAX_NUMERIC_VALUE = Double.MAX_VALUE / 2;
-        private static final Logger logger = Logger.getLogger(ArrayService.class.getName());
+        private static final Logger logger = LoggerFactory.getLogger(ArrayService.class);
     static {
-        logger.log(Level.INFO, "StringService initialized with logging level: {0}", logger.getLevel());
+        logger.info(Level.INFO, "StringService initialized with logging level: {0}", logger.getLevel());
     }
     /**************************************************************************/
 
