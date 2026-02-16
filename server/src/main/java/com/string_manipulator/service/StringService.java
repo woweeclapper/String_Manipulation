@@ -8,7 +8,9 @@ import static com.string_manipulator.util.ReverseString.reverse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class StringService {
 
     private static final Logger logger = LoggerFactory.getLogger(StringService.class);
@@ -83,12 +85,12 @@ public class StringService {
 
     private String processShift(String input, int shifts, String direction) {
         try {
-            // Normalize shifts to prevent unnecessary operations
+            // Normalize numOfShifts to prevent unnecessary operations
             int normalizedShifts = shifts % input.length();
-            logger.info("Normalized shifts from {} to {}", shifts, normalizedShifts);
+            logger.info("Normalized numOfShifts from {} to {}", shifts, normalizedShifts);
             return ShiftedString.shifting(input, normalizedShifts, direction);
         } catch (Exception e) {
-            logger.warn("Failed to shift string: input = {}, shifts = {}, direction = {}",
+            logger.warn("Failed to shift string: input = {}, numOfShifts = {}, direction = {}",
                     input, shifts, direction);
             throw new IllegalArgumentException("Failed to shift string: " + e.getMessage(), e);
         }

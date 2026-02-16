@@ -152,7 +152,7 @@ class StringServiceTest {
     }
 
     @Test
-    @DisplayName("shiftString - negative shifts throw exception")
+    @DisplayName("shiftString - negative numOfShifts throw exception")
     void shiftString_NegativeShifts_ThrowsIllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
@@ -263,7 +263,7 @@ class StringServiceTest {
         String reversed2 = stringService.reverseString(reversed1);
         assertEquals(original, reversed2);
 
-        // Multiple shifts with full rotation should return original
+        // Multiple numOfShifts with full rotation should return original
         String shifted1 = stringService.shiftString(original, 2, "left");
         String shifted2 = stringService.shiftString(shifted1, original.length() - 2, "left");
         assertEquals(original, shifted2);
@@ -333,7 +333,7 @@ class StringServiceTest {
         assertEquals(family, stringService.shiftString(family, family.length(), "left"));
         assertEquals(family, stringService.shiftString(family, family.length(), "right"));
 
-        // Test partial shifts on complex emojis
+        // Test partial numOfShifts on complex emojis
         String result = stringService.shiftString(family, 1, "left");
         assertNotNull(result);
         assertEquals(family.length(), result.length());

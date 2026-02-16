@@ -23,7 +23,7 @@ class ShiftedStringTest {
     }
 
     @Test
-    @DisplayName("Test zero shifts")
+    @DisplayName("Test zero numOfShifts")
     void testZeroShifts() {
         assertEquals("abcd", ShiftedString.shifting("abcd", 0, "left"));
         assertEquals("abcd", ShiftedString.shifting("abcd", 0, "right"));
@@ -118,7 +118,7 @@ class ShiftedStringTest {
     }
 
     @Test
-    @DisplayName("Test maximum shifts")
+    @DisplayName("Test maximum numOfShifts")
     void testMaximumShifts() {
         String original = "test";
         assertEquals("ttes", ShiftedString.shifting(original, Integer.MAX_VALUE, "left"));
@@ -240,7 +240,7 @@ class ShiftedStringTest {
     }
 
     @Test
-    @DisplayName("Test negative shift scenarios via large positive shifts")
+    @DisplayName("Test negative shift scenarios via large positive numOfShifts")
     void testNegativeEquivalentShifts() {
         // Left shift by 3 is equivalent to right shift by 1 for 4-char string
         assertEquals("dabc", ShiftedString.shifting("abcd", 3, "left"));
@@ -260,7 +260,7 @@ class ShiftedStringTest {
         assertEquals("gabcdef", ShiftedString.shifting(prime, 1, "right"));
         assertEquals("fgabcde", ShiftedString.shifting(prime, 2, "right"));
 
-        // Test large shifts on prime length
+        // Test large numOfShifts on prime length
         assertEquals("bcdefga", ShiftedString.shifting(prime, 8, "left"));   // 8 % 7 = 1
         assertEquals("cdefgab", ShiftedString.shifting(prime, 16, "left"));  // 16 % 7 = 2
     }
@@ -294,7 +294,7 @@ class ShiftedStringTest {
     }
 
     @Test
-    @DisplayName("Test boundary values for shifts")
+    @DisplayName("Test boundary values for numOfShifts")
     void testBoundaryShiftValues() {
         String test = "test";
 
@@ -332,7 +332,7 @@ class ShiftedStringTest {
         assertEquals("yx", ShiftedString.shifting(two, 1, "left"));
         assertEquals("yx", ShiftedString.shifting(two, 1, "right"));
 
-        // Even shifts return original
+        // Even numOfShifts return original
         assertEquals("xy", ShiftedString.shifting(two, 2, "left"));
         assertEquals("xy", ShiftedString.shifting(two, 4, "left"));
         assertEquals("xy", ShiftedString.shifting(two, 2, "right"));
@@ -388,7 +388,7 @@ class ShiftedStringTest {
         String leftShifted = ShiftedString.shifting(original, 2, "left");
         assertEquals(original, ShiftedString.shifting(leftShifted, 2, "right"));
 
-        // Property 3: multiple small shifts = one large shift
+        // Property 3: multiple small numOfShifts = one large shift
         assertEquals(
                 ShiftedString.shifting(original, 3, "left"),
                 ShiftedString.shifting(
@@ -402,7 +402,7 @@ class ShiftedStringTest {
     void testExtremeModulo() {
         String test = "abc";
 
-        // Test shifts that are multiples of length
+        // Test numOfShifts that are multiples of length
         assertEquals(test, ShiftedString.shifting(test, 3000000, "left"));   // 3000000 % 3 = 0
         assertEquals("bca", ShiftedString.shifting(test, 3000001, "left"));   // 3000001 % 3 = 1
         assertEquals("cab", ShiftedString.shifting(test, 3000002, "left"));   // 3000002 % 3 = 2

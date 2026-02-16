@@ -18,7 +18,7 @@ public class ShiftedString {
             return response;
         }
 
-        // Normalize shifts
+        // Normalize numOfShifts
         numOfShifts = numOfShifts % length;
 
 
