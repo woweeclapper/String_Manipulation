@@ -5,6 +5,7 @@ import com.string_manipulator.dto.array.SortRequest;
 import com.string_manipulator.dto.array.SumRequest;
 import com.string_manipulator.dto.array.SumResponse;
 import com.string_manipulator.dto.array.separation_responses.IntSepResponses;
+import com.string_manipulator.dto.array.separation_responses.DoubleSepResponse;
 import com.string_manipulator.dto.array.sort_responses.DoubleSortResponse;
 import com.string_manipulator.dto.array.sort_responses.IntSortResponse;
 import com.string_manipulator.service.ArrayService;
@@ -82,18 +83,20 @@ public class ArrayController {
                     .mapToInt(Number::intValue)
                     .toArray();
 
-            IntSepResponses result = arrayService.separateArray(arr, request.separationType());
+            SeparationResult<Integer> result = arrayService.separateArray(arr, request.separationType());
 
             // Convert arrays back to List<Integer>
-            List<Integer> first = Arrays.stream(result.first())
-                    .boxed()
-                    .toList();
+            List<Integer> first;
+            List<Integer> second;
+            if (result.getSeparationType() == SeparationResult.SeparationType.PARITY) {
+                first = result.getEven();
+                second = result.getOdd();
+            } else {
+                first = result.getPositive();
+                second = result.getNegative();
+            }
 
-            List<Integer> second = Arrays.stream(result.second())
-                    .boxed()
-                    .toList();
-
-            return new IntSepResponses(first, second, "integer");
+            return new IntSepResponses(first, second, result.getSeparationType().getValue());
         }
 
         // Otherwise treat as double[]
@@ -101,20 +104,20 @@ public class ArrayController {
                 .mapToDouble(Number::doubleValue)
                 .toArray();
 
-        DoubleSepResult result = arrayService.separateArray(arr);
+        SeparationResult<Double> result = arrayService.separateArray(arr, request.separationType());
 
-        List<Double> first = Arrays.stream(result.first())
-                .boxed()
-                .toList();
+        List<Double> first;
+        List<Double> second;
+        if (result.getSeparationType() == SeparationResult.SeparationType.PARITY) {
+            first = result.getEven();
+            second = result.getOdd();
+        } else {
+            first = result.getPositive();
+            second = result.getNegative();
+        }
 
-        List<Double> second = Arrays.stream(result.second())
-                .boxed()
-                .toList();
-
-        return new DoubleSepResponse(first, second, "double");
+        return new DoubleSepResponse(first, second, result.getSeparationType().getValue());
     }
-
-
 
 
 }
