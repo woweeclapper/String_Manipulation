@@ -4,18 +4,19 @@ import com.string_manipulator.dto.array.SeparationRequest;
 import com.string_manipulator.dto.array.SortRequest;
 import com.string_manipulator.dto.array.SumRequest;
 import com.string_manipulator.dto.array.SumResponse;
-import com.string_manipulator.dto.array.separation_responses.IntSepResponses;
 import com.string_manipulator.dto.array.separation_responses.DoubleSepResponse;
+import com.string_manipulator.dto.array.separation_responses.IntSepResponses;
 import com.string_manipulator.dto.array.sort_responses.DoubleSortResponse;
 import com.string_manipulator.dto.array.sort_responses.IntSortResponse;
 import com.string_manipulator.service.ArrayService;
 import com.string_manipulator.service.SeparationResult;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,8 +32,12 @@ public class ArrayController {
         this.arrayService = arrayService;
     }
 
-    @PostMapping("/sum")
-    public SumResponse sum(@RequestBody SumRequest request) {
+    @PostMapping(
+            value = "/sum",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public SumResponse sum(@Valid @RequestBody SumRequest request) {
         List<Number> values = request.numbersList();
         boolean allIntegers = values.stream().allMatch(Integer.class::isInstance);
 
@@ -45,8 +50,13 @@ public class ArrayController {
         }
 
     }
-    @PostMapping("/sort")
-    public Object sort(@RequestBody SortRequest request) {
+
+    @PostMapping(
+            value = "/sort",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public Object sort(@Valid @RequestBody SortRequest request) {
 
         List<Number> values = request.numbersList();
 
@@ -69,8 +79,13 @@ public class ArrayController {
                 Arrays.stream(sorted).boxed().toList(),
                 request.orderType());
     }
-    @PostMapping("/separate")
-    public Object separate(@RequestBody SeparationRequest request) {
+
+    @PostMapping(
+            value = "/separate",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public Object separate(@Valid @RequestBody SeparationRequest request) {
 
         List<Number> values = request.numberList();
 
