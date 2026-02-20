@@ -3,6 +3,7 @@ package com.string_manipulator.util;
 /* @author Joe Nguyen */
 
 import java.util.List;
+
 import static com.string_manipulator.util.GraphemeCluster.splitIntoGraphemes;
 
 
@@ -32,8 +33,6 @@ public class ShiftedString {
             for (int i = 0; i < length; i++) {
                 shifted.append(graphemes.get((i - numOfShifts + length) % length));
             }
-        } else {
-            throw new IllegalArgumentException("Choice must be 'left' or 'right'");
         }
 
         return shifted.toString();

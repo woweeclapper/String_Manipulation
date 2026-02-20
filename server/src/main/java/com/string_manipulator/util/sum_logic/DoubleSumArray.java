@@ -6,9 +6,7 @@ public class DoubleSumArray {
         if (length == 1) {
             return array[0];
         }
-        if (length <= 0){
-            throw new ArrayIndexOutOfBoundsException("Invalid length: "+ length);
-        }
+
         //using recursion in this design context is fine, but I see the limitation now
         return (findSum(array, length - 1) + array[length - 1]);
     }

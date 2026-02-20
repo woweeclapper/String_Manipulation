@@ -11,9 +11,7 @@ public class GraphemeCluster {
      * Safe for complex emojis, combining marks, ZWJ sequences, etc.
      */
     public static List<String> splitIntoGraphemes(String text) {
-        if (text == null || text.isEmpty()) {
-            return List.of();
-        }
+
 
         List<String> graphemes = new ArrayList<>();
 
@@ -33,7 +31,7 @@ public class GraphemeCluster {
      * Gets the number of grapheme clusters (better than codePointCount for human length).
      */
     public static int graphemeLength(String text) {
-        if (text == null) return 0;
+
 
         BreakIterator iterator = BreakIterator.getCharacterInstance();
         iterator.setText(text);

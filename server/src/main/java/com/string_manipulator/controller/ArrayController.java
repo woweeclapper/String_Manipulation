@@ -97,7 +97,7 @@ public class ArrayController {
             int[] arr = values.stream()
                     .mapToInt(Number::intValue)
                     .toArray();
-
+            //call the method first
             SeparationResult<Integer> result = arrayService.separateArray(arr, request.separationType());
 
             // Convert arrays back to List<Integer>

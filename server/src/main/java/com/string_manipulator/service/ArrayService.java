@@ -3,10 +3,11 @@ package com.string_manipulator.service;
 import com.string_manipulator.util.SortingArray;
 import com.string_manipulator.util.sum_logic.DoubleSumArray;
 import com.string_manipulator.util.sum_logic.RecursiveSumArray;
-import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class ArrayService {
@@ -14,9 +15,9 @@ public class ArrayService {
     /**
      * This class contains methods for performing operations on arrays.
      */
-        private static final int MAX_ARRAY_LENGTH = 1000;
-        private static final double MAX_NUMERIC_VALUE = Double.MAX_VALUE / 2;
-        private static final Logger logger = LoggerFactory.getLogger(ArrayService.class);
+    private static final int MAX_ARRAY_LENGTH = 1000;
+    private static final double MAX_NUMERIC_VALUE = Double.MAX_VALUE / 2;
+    private static final Logger logger = LoggerFactory.getLogger(ArrayService.class);
 
     /**************************************************************************/
 
@@ -58,7 +59,7 @@ public class ArrayService {
             throw new IllegalArgumentException("Array length exceeds maximum length of " + MAX_ARRAY_LENGTH); // Let validation exceptions propagate
         } catch (Exception e) {
             logger.warn("Failed to sort int array {} and orderType {}",
-                   arrayToSort, orderType);
+                    arrayToSort, orderType);
             throw new UnsupportedOperationException("Failed to sort int array: " + e.getMessage(), e);
         }
     }
@@ -76,7 +77,7 @@ public class ArrayService {
             throw new IllegalArgumentException("Array length exceeds maximum length of " + MAX_ARRAY_LENGTH); // Let validation exceptions propagate
         } catch (Exception e) {
             logger.warn("Failed to sort double array {} and orderType {}",
-                   arrayToSort, orderType);
+                    arrayToSort, orderType);
             throw new UnsupportedOperationException("Failed to sort int array: " + e.getMessage(), e);
         }
     }
@@ -85,7 +86,7 @@ public class ArrayService {
 
     public SeparationResult<Integer> separateArray(int[] arrayToPart, String separationType) {
         logger.info("Entering IntSeparate with input of length {} and separationType {}",
-               arrayToPart.length, separationType);
+                arrayToPart.length, separationType);
         try {
             validateArray(arrayToPart);
             validateSeparationParameters(separationType);
@@ -95,14 +96,14 @@ public class ArrayService {
             return result;
         } catch (Exception e) {
             logger.warn("Failed to separate int array {} and separationType {}",
-                   arrayToPart, separationType);
+                    arrayToPart, separationType);
             throw new UnsupportedOperationException("Failed to separate int array: " + e.getMessage(), e);
         }
     }
 
     public SeparationResult<Double> separateArray(double[] arrayToPart, String separationType) {
         logger.info("Entering DoubleSeparate with input of length {} and separationType {}",
-               arrayToPart.length, separationType);
+                arrayToPart.length, separationType);
         try {
             validateArray(arrayToPart);
             validateSeparationParameters(separationType);
@@ -240,7 +241,7 @@ public class ArrayService {
             logger.warn("Array validation failed: null array");
             throw new IllegalArgumentException("Array cannot be null");
         }
-        if (java.lang.reflect.Array.getLength(array) == 0) {
+        if (java.lang.reflect.Array.getLength(array) <= 0) {
             logger.warn("Array validation failed: empty array");
             throw new IllegalArgumentException("Array cannot be empty");
         }
