@@ -133,6 +133,5 @@ public class ArrayController {
 
         return new DoubleSepResponse(first, second, result.getSeparationType().getValue());
     }
-
-
+    
 }

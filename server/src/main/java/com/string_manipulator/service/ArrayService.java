@@ -18,6 +18,8 @@ public class ArrayService {
     private static final int MAX_ARRAY_LENGTH = 1000;
     private static final double MAX_NUMERIC_VALUE = Double.MAX_VALUE / 2;
     private static final Logger logger = LoggerFactory.getLogger(ArrayService.class);
+    private static final String ASCENDING = "ascending";
+    private static final String DESCENDING = "descending";// Parameter normalization methods
 
     /**************************************************************************/
 
@@ -135,18 +137,17 @@ public class ArrayService {
         }
     }
 
-    // Parameter normalization methods
     private String normalizeOrderType(String orderType) {
         logger.info("Normalizing order type: {}", orderType);
         String normalized = orderType.toLowerCase().trim();
         return switch (normalized) {
-            case "ascending", "a" -> {
+            case ASCENDING, "a" -> {
                 logger.info("Normalized order to ascending");
-                yield "ascending";
+                yield ASCENDING;
             }
-            case "descending", "d" -> {
+            case DESCENDING, "d" -> {
                 logger.info("Normalized order to descending");
-                yield "descending";
+                yield DESCENDING;
             }
             default -> {
                 logger.warn("Invalid order type {}", orderType);
@@ -176,9 +177,9 @@ public class ArrayService {
 
     // Type-specific handlers
     private int[] handleSorting(int[] array, String orderType) {
-        if ("ascending".equals(orderType)) {
+        if (ASCENDING.equals(orderType)) {
             return SortingArray.sortAscending(array);
-        } else if ("descending".equals(orderType)) {
+        } else if (DESCENDING.equals(orderType)) {
             return SortingArray.sortDescending(array);
         } else {
             throw new IllegalArgumentException("Order must be 'ascending'/'a' or 'descending'/'d'");
@@ -186,9 +187,9 @@ public class ArrayService {
     }
 
     private double[] handleSorting(double[] array, String orderType) {
-        if ("ascending".equals(orderType)) {
+        if (ASCENDING.equals(orderType)) {
             return SortingArray.sortAscending(array);
-        } else if ("descending".equals(orderType)) {
+        } else if (DESCENDING.equals(orderType)) {
             return SortingArray.sortDescending(array);
         } else {
             throw new IllegalArgumentException("Order must be 'ascending'/'a' or 'descending'/'d'");

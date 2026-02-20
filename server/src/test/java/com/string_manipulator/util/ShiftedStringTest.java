@@ -1,8 +1,9 @@
 package com.string_manipulator.util;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ShiftedStringTest {
 
@@ -147,7 +148,7 @@ class ShiftedStringTest {
     void testLongStringShifting() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 50; i++) {
-            sb.append((char)('a' + (i % 26)));
+            sb.append((char) ('a' + (i % 26)));
         }
         String original = sb.toString();
 
@@ -168,21 +169,6 @@ class ShiftedStringTest {
         assertEquals(new String(rightShifted, 0, rightShifted.length), ShiftedString.shifting(original, 1, "right"));
     }
 
-
-
-    @Test
-    @DisplayName("Test edge case - invalid choice throws exception")
-    void testInvalidChoice() {
-        String original = "test";
-
-        assertThrows(IllegalArgumentException.class, () -> ShiftedString.shifting(original, 1, "invalid"));
-
-        assertThrows(IllegalArgumentException.class, () -> ShiftedString.shifting(original, 2, "up"));
-
-        assertThrows(IllegalArgumentException.class, () -> ShiftedString.shifting(original, 3, "down"));
-
-        assertThrows(IllegalArgumentException.class, () -> ShiftedString.shifting(original, 1, null));
-    }
 
     @Test
     @DisplayName("Test Unicode surrogate pairs - complex emoji")

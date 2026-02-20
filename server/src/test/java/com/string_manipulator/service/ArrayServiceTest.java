@@ -115,24 +115,24 @@ class ArrayServiceTest {
     @Test
     void sortArray_IntArrayNullOrder_ThrowsIllegalArgumentException() {
         int[] array = {1, 2, 3};
-        assertThrows(RuntimeException.class, () -> arrayService.sortArray(array, null));
+        assertThrows(IllegalArgumentException.class, () -> arrayService.sortArray(array, null));
     }
 
     @Test
     void sortArray_IntArrayEmptyOrder_ThrowsIllegalArgumentException() {
         int[] array = {1, 2, 3};
-        assertThrows(RuntimeException.class, () -> arrayService.sortArray(array, ""));
+        assertThrows(IllegalArgumentException.class, () -> arrayService.sortArray(array, ""));
     }
 
     @Test
     void sortArray_IntArrayInvalidOrder_ThrowsIllegalArgumentException() {
         int[] array = {1, 2, 3};
-        assertThrows(RuntimeException.class, () -> arrayService.sortArray(array, "invalid"));
+        assertThrows(IllegalArgumentException.class, () -> arrayService.sortArray(array, "invalid"));
     }
 
     @Test
     void sortArray_NullIntArray_ThrowsIllegalArgumentException() {
-        assertThrows(RuntimeException.class, () -> arrayService.sortArray((int[]) null, "ascending"));
+        assertThrows(IllegalArgumentException.class, () -> arrayService.sortArray((int[]) null, "ascending"));
     }
 
     // Separate Array Tests - Int
@@ -168,15 +168,15 @@ class ArrayServiceTest {
     }
 
     @Test
-    void separateArray_IntArrayNullSeparationType_ThrowsRuntimeException() {
+    void separateArray_IntArrayNullSeparationType_ThrowsIllegalArgumentException() {
         int[] array = {1, 2, 3};
-        assertThrows(RuntimeException.class, () -> arrayService.separateArray(array, null));
+        assertThrows(IllegalArgumentException.class, () -> arrayService.separateArray(array, null));
     }
 
     @Test
-    void separateArray_IntArrayInvalidSeparationType_ThrowsRuntimeException() {
+    void separateArray_IntArrayInvalidSeparationType_ThrowsIllegalArgumentException() {
         int[] array = {1, 2, 3};
-        assertThrows(RuntimeException.class, () -> arrayService.separateArray(array, "invalid"));
+        assertThrows(IllegalArgumentException.class, () -> arrayService.separateArray(array, "invalid"));
     }
 
     // Separate Array Tests - Double (ENABLED)
@@ -646,7 +646,7 @@ class ArrayServiceTest {
     @DisplayName("Error propagation: Nested exception handling")
     void errorPropagation_NestedExceptions() {
         // Test that exceptions from underlying utilities are properly wrapped
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             arrayService.separateArray(new int[]{1}, "invalid_type");
         });
 
@@ -731,6 +731,7 @@ class ArrayServiceTest {
             arrays.clear(); // Help GC
         }
     }
+
     // Helper methods
     private int[] parseIntArray(String str) {
         return java.util.Arrays.stream(str.split(","))
