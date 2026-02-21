@@ -58,11 +58,12 @@ public class ArrayService {
             logger.info("Exiting IntSort successful");
             return handleSorting(arrayToSort, normalizedOrder);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Array length exceeds maximum length of " + MAX_ARRAY_LENGTH); // Let validation exceptions propagate
+            //let business rule exceptions propagate unchanged
+            throw e;  // Just re-throw, don't change message
         } catch (Exception e) {
             logger.warn("Failed to sort int array {} and orderType {}",
                     arrayToSort, orderType);
-            throw new UnsupportedOperationException("Failed to sort int array: " + e.getMessage(), e);
+            throw new IllegalStateException("Failed to sort int array: " + e.getMessage(), e);
         }
     }
 
@@ -76,11 +77,11 @@ public class ArrayService {
             logger.info("Exiting DoubleSort successful");
             return handleSorting(arrayToSort, normalizedOrder);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Array length exceeds maximum length of " + MAX_ARRAY_LENGTH); // Let validation exceptions propagate
+            throw e;
         } catch (Exception e) {
             logger.warn("Failed to sort double array {} and orderType {}",
                     arrayToSort, orderType);
-            throw new UnsupportedOperationException("Failed to sort int array: " + e.getMessage(), e);
+            throw new IllegalStateException("Failed to sort double array: " + e.getMessage(), e);
         }
     }
 
@@ -96,10 +97,12 @@ public class ArrayService {
             SeparationResult<Integer> result = handleSeparation(arrayToPart, normalizedSeparation);
             logger.info("Exiting IntSeparate successfully with result: {}", result);
             return result;
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (Exception e) {
             logger.warn("Failed to separate int array {} and separationType {}",
                     arrayToPart, separationType);
-            throw new UnsupportedOperationException("Failed to separate int array: " + e.getMessage(), e);
+            throw new IllegalStateException("Failed to separate int array: " + e.getMessage(), e);
         }
     }
 
@@ -113,10 +116,12 @@ public class ArrayService {
             SeparationResult<Double> result = handleSeparation(arrayToPart, normalizedSeparation);
             logger.info("Exiting DoubleSeparate successfully with result: {}", result);
             return result;
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (Exception e) {
             logger.warn("Failed to separate double array {} and separationType {}",
                     arrayToPart, separationType);
-            throw new UnsupportedOperationException("Failed to separate double array: " + e.getMessage(), e);
+            throw new IllegalStateException("Failed to separate double array: " + e.getMessage(), e);
         }
     }
 
