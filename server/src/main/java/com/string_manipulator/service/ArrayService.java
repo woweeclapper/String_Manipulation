@@ -9,13 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+
+//todo: move structural constraints to dto layer
 @Service
 public class ArrayService {
     /* @author Joe Nguyen */
-    /**
-     * This class contains methods for performing operations on arrays.
-     */
-    private static final int MAX_ARRAY_LENGTH = 1000;
+
     private static final double MAX_NUMERIC_VALUE = Double.MAX_VALUE / 2;
     private static final Logger logger = LoggerFactory.getLogger(ArrayService.class);
     private static final String ASCENDING = "ascending";
@@ -50,10 +49,9 @@ public class ArrayService {
 
     public int[] sortArray(int[] arrayToSort, String orderType) {
         logger.info("Entering IntSort with input of length {} and orderType {}",
-                arrayToSort.length, orderType);
+                arrayToSort.length, orderType); //null can be thrown if the array is null
         try {
             validateArray(arrayToSort);
-            validateOrderParameters(orderType);
             String normalizedOrder = normalizeOrderType(orderType);
             logger.info("Exiting IntSort successful");
             return handleSorting(arrayToSort, normalizedOrder);
@@ -72,7 +70,6 @@ public class ArrayService {
                 arrayToSort.length, orderType);
         try {
             validateArray(arrayToSort);
-            validateOrderParameters(orderType);
             String normalizedOrder = normalizeOrderType(orderType);
             logger.info("Exiting DoubleSort successful");
             return handleSorting(arrayToSort, normalizedOrder);
@@ -92,7 +89,6 @@ public class ArrayService {
                 arrayToPart.length, separationType);
         try {
             validateArray(arrayToPart);
-            validateSeparationParameters(separationType);
             String normalizedSeparation = normalizeSeparationType(separationType);
             SeparationResult<Integer> result = handleSeparation(arrayToPart, normalizedSeparation);
             logger.info("Exiting IntSeparate successfully with result: {}", result);
@@ -111,7 +107,6 @@ public class ArrayService {
                 arrayToPart.length, separationType);
         try {
             validateArray(arrayToPart);
-            validateSeparationParameters(separationType);
             String normalizedSeparation = normalizeSeparationType(separationType);
             SeparationResult<Double> result = handleSeparation(arrayToPart, normalizedSeparation);
             logger.info("Exiting DoubleSeparate successfully with result: {}", result);
@@ -127,24 +122,12 @@ public class ArrayService {
 
     /**************************************************************************/
 
-    // Parameter validation
-    private void validateOrderParameters(String orderType) {
-        if (orderType == null || orderType.trim().isEmpty()) {
-            logger.warn("Order type validation failed: null or empty");
-            throw new IllegalArgumentException("Order type cannot be null or empty");
-        }
-    }
-
-    private void validateSeparationParameters(String separationType) {
-        if (separationType == null || separationType.trim().isEmpty()) {
-            logger.warn("Separation type validation failed: null or empty");
-            throw new IllegalArgumentException("Separation type cannot be null or empty");
-        }
-    }
-
+    // Parameter normalization
     private String normalizeOrderType(String orderType) {
         logger.info("Normalizing order type: {}", orderType);
-        String normalized = orderType.toLowerCase().trim();
+        String normalized = orderType.trim();              // remove outer whitespace
+        normalized = normalized.replaceAll("\\s+", "");    // remove internal whitespace
+        normalized = normalized.toLowerCase();             // normalize case
         return switch (normalized) {
             case ASCENDING, "a" -> {
                 logger.info("Normalized order to ascending");
@@ -154,7 +137,7 @@ public class ArrayService {
                 logger.info("Normalized order to descending");
                 yield DESCENDING;
             }
-            default -> {
+            default -> {//dead code, but it's here for completeness
                 logger.warn("Invalid order type {}", orderType);
                 throw new IllegalArgumentException("Order must be 'ascending'/'a' or 'descending'/'d'");
             }
@@ -163,7 +146,9 @@ public class ArrayService {
 
     private String normalizeSeparationType(String separationType) {
         logger.info("Normalizing separation type: {}", separationType);
-        String normalized = separationType.toLowerCase().trim();
+        String normalized = separationType.trim();              // remove outer whitespace
+        normalized = normalized.replaceAll("\\s+", "");    // remove internal whitespace
+        normalized = normalized.toLowerCase();             // normalize case
         return switch (normalized) {
             case "parity", "p" -> {
                 logger.info("Separation type normalized to parity");
@@ -173,7 +158,7 @@ public class ArrayService {
                 logger.info("Separation type normalized to sign");
                 yield "sign";
             }
-            default -> {
+            default -> {//dead code, but it's here for completeness
                 logger.warn("Invalid separation type {}", separationType);
                 throw new IllegalArgumentException("Separation must be 'parity'/'p' or 'sign'/'s'");
             }
@@ -209,12 +194,8 @@ public class ArrayService {
         SeparationResult.SeparationType type = SeparationResult.SeparationType.fromString(separationType);
 
         switch (type) {
-            case PARITY:
-                SortingArray.separateEvenAndOdd(array, first, second);
-                break;
-            case SIGN:
-                SortingArray.separatePositiveAndNegative(array, first, second);
-                break;
+            case PARITY -> SortingArray.separateEvenAndOdd(array, first, second);
+            case SIGN -> SortingArray.separatePositiveAndNegative(array, first, second);
         }
 
         return new SeparationResult<>(first, second, type);
@@ -226,40 +207,19 @@ public class ArrayService {
 
         SeparationResult.SeparationType type = SeparationResult.SeparationType.fromString(separationType);
 
-        switch (type) {
-            case PARITY:
-                SortingArray.separateEvenAndOdd(array, first, second);
-                break;
-            case SIGN:
-                SortingArray.separatePositiveAndNegative(array, first, second);
-                break;
+        //technically the same code as above, but it's here for *VARIETY* LOL
+        if (type == SeparationResult.SeparationType.PARITY) {
+            SortingArray.separateEvenAndOdd(array, first, second);
+        } else if (type == SeparationResult.SeparationType.SIGN) {
+            SortingArray.separatePositiveAndNegative(array, first, second);
         }
-
         return new SeparationResult<>(first, second, type);
     }
 
     /**************************************************************************/
 
     //array validation methods
-    private void validateArrayCommon(Object array) {
-        // Common validation for null, empty, and length
-        if (array == null) {
-            logger.warn("Array validation failed: null array");
-            throw new IllegalArgumentException("Array cannot be null");
-        }
-        if (java.lang.reflect.Array.getLength(array) <= 0) {
-            logger.warn("Array validation failed: empty array");
-            throw new IllegalArgumentException("Array cannot be empty");
-        }
-        if (java.lang.reflect.Array.getLength(array) > MAX_ARRAY_LENGTH) {
-            logger.warn("Array validation failed: array length is {}", java.lang.reflect.Array.getLength(array));
-            throw new IllegalArgumentException("Array length exceeds maximum of " + MAX_ARRAY_LENGTH);
-        }
-    }
-
     private void validateArray(int[] intArray) {
-        // Array-level validation
-        validateArrayCommon(intArray);
 
         // Element-level validation with fail-fast
         boolean hasValidElement = false;
@@ -276,8 +236,6 @@ public class ArrayService {
     }
 
     private void validateArray(double[] doubleArray) {
-        // Array-level validation
-        validateArrayCommon(doubleArray);
 
         // Element-level validation with fail-fast
         boolean hasValidElement = false;
