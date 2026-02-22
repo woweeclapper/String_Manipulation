@@ -6,10 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-
-
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,8 +26,6 @@ class StringServiceTest {
         assertEquals("olleh", stringService.reverseString("hello"));
         assertEquals("A", stringService.reverseString("A"));
         assertEquals("dlrow olleh", stringService.reverseString("hello world"));
-        assertThrows(IllegalArgumentException.class,
-                () -> stringService.reverseString("  "));
         assertEquals("Ba", stringService.reverseString("aB"));
         assertEquals("12345", stringService.reverseString("54321"));
         assertEquals("!@#$%", stringService.reverseString("%$#@!"));
@@ -58,29 +52,9 @@ class StringServiceTest {
     }
 
     @Test
-    @DisplayName("reverseString - null input throws exception")
-    void reverseString_NullInput_ThrowsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.reverseString(null)
-        );
-        assertEquals("String cannot by null", exception.getMessage());
-    }
-
-    @ParameterizedTest
-    @DisplayName("reverseString - invalid inputs throw exceptions")
-    @NullAndEmptySource
-    @ValueSource(strings = {"   ", "\t", "\n", "\r", "  \t\n  "})
-    void reverseString_InvalidInputs_ThrowsIllegalArgumentException(String input) {
-        assertThrows(IllegalArgumentException.class, () -> stringService.reverseString(input));
-    }
-
-
-
-    @Test
     @DisplayName("reverseString - boundary length works correctly")
     void reverseString_BoundaryLength_WorksCorrectly() {
-        String maxLengthString = "a".repeat(1000);
+        String maxLengthString = "a".repeat(10000);
         assertDoesNotThrow(() -> stringService.reverseString(maxLengthString));
         assertEquals(maxLengthString, stringService.reverseString(maxLengthString));
     }
@@ -92,6 +66,8 @@ class StringServiceTest {
     void shiftString_LeftShift_ValidInput_ReturnsShiftedString() {
         assertEquals("llohe", stringService.shiftString("hello", 2, "left"));
         assertEquals("llohe", stringService.shiftString("hello", 2, "LEFT"));
+        assertEquals("llohe", stringService.shiftString("hello", 2, "L EFT"));
+        assertEquals("llohe", stringService.shiftString("hello", 2, "L E F t"));
         assertEquals("llohe", stringService.shiftString("hello", 2, "l"));
         assertEquals("llohe", stringService.shiftString("hello", 2, "L"));
     }
@@ -101,6 +77,8 @@ class StringServiceTest {
     void shiftString_RightShift_ValidInput_ReturnsShiftedString() {
         assertEquals("lohel", stringService.shiftString("hello", 2, "right"));
         assertEquals("lohel", stringService.shiftString("hello", 2, "RIGHT"));
+        assertEquals("lohel", stringService.shiftString("hello", 2, "R I G H T"));
+        assertEquals("lohel", stringService.shiftString("hello", 2, "Ri gHT"));
         assertEquals("lohel", stringService.shiftString("hello", 2, "r"));
         assertEquals("lohel", stringService.shiftString("hello", 2, "R"));
     }
@@ -133,60 +111,13 @@ class StringServiceTest {
         assertEquals("lo@!@", stringService.shiftString("@!@lo", 2, "right"));
     }
 
-    @Test
-    @DisplayName("shiftString - null string throws exception")
-    void shiftString_NullString_ThrowsIllegalArgumentException() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.shiftString(null, 1, "left")
-        );
-    }
-
-    @Test
-    @DisplayName("shiftString - empty string throws exception")
-    void shiftString_EmptyString_ThrowsIllegalArgumentException() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.shiftString("", 1, "left")
-        );
-    }
-
-    @Test
-    @DisplayName("shiftString - negative numOfShifts throw exception")
-    void shiftString_NegativeShifts_ThrowsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.shiftString("hello", -1, "left")
-        );
-        assertEquals("Shifts cannot be negative", exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("shiftString - null direction throws exception")
-    void shiftString_NullDirection_ThrowsIllegalArgumentException() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.shiftString("hello", 1, null)
-        );
-    }
-
-    @ParameterizedTest
-    @DisplayName("shiftString - invalid directions throw exceptions")
-    @ValueSource(strings = {"up", "down", "forward", "backward", "", "invalid"})
-    void shiftString_InvalidDirection_ThrowsIllegalArgumentException(String direction) {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.shiftString("hello", 1, direction)
-        );
-    }
-
     // ==================== Performance Tests ====================
 
     @Test
     @DisplayName("reverseString - large input performance")
     @Timeout(value = 100, unit = java.util.concurrent.TimeUnit.MILLISECONDS)
     void reverseString_LargeInput_PerformsWithinTimeLimit() {
-        String largeString = "a".repeat(999);
+        String largeString = "a".repeat(9999);
         assertDoesNotThrow(() -> stringService.reverseString(largeString));
     }
 
@@ -194,7 +125,7 @@ class StringServiceTest {
     @DisplayName("shiftString - large input performance")
     @Timeout(value = 100, unit = java.util.concurrent.TimeUnit.MILLISECONDS)
     void shiftString_LargeInput_PerformsWithinTimeLimit() {
-        String largeString = "a".repeat(999);
+        String largeString = "a".repeat(9999);
         assertDoesNotThrow(() -> stringService.shiftString(largeString, 100, "left"));
     }
 
@@ -263,21 +194,13 @@ class StringServiceTest {
         String reversed2 = stringService.reverseString(reversed1);
         assertEquals(original, reversed2);
 
-        // Multiple numOfShifts with full rotation should return original
+        // Multiple shifts with full rotation should return original
         String shifted1 = stringService.shiftString(original, 2, "left");
         String shifted2 = stringService.shiftString(shifted1, original.length() - 2, "left");
         assertEquals(original, shifted2);
     }
-    // ==================== Extreme Input Validation Tests ====================
 
-    @Test
-    @DisplayName("reverseString - string with only control characters")
-    void reverseString_OnlyControlCharacters_ThrowsException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> stringService.reverseString("\0\1\2\3\4\5\6\7"));
-        assertThrows(IllegalArgumentException.class,
-                () -> stringService.reverseString("\u0000\u0001\u0002"));
-    }
+    // ==================== Extreme Input Tests ====================
 
     @Test
     @DisplayName("reverseString - mixed control and printable characters")
@@ -312,7 +235,7 @@ class StringServiceTest {
         assertEquals(input, stringService.shiftString(input, length * 10, "right"));
     }
 
-// ==================== Unicode and Complex Character Tests ====================
+    // ==================== Unicode and Complex Character Tests ====================
 
     @Test
     @DisplayName("reverseString - complex emoji sequences")
@@ -333,7 +256,7 @@ class StringServiceTest {
         assertEquals(family, stringService.shiftString(family, family.length(), "left"));
         assertEquals(family, stringService.shiftString(family, family.length(), "right"));
 
-        // Test partial numOfShifts on complex emojis
+        // Test partial shifts on complex emojis
         String result = stringService.shiftString(family, 1, "left");
         assertNotNull(result);
         assertEquals(family.length(), result.length());
@@ -357,16 +280,15 @@ class StringServiceTest {
         assertEquals(mixed.length(), shifted.length());
     }
 
-// ==================== Memory and Performance Stress Tests ====================
+    // ==================== Memory and Performance Stress Tests ====================
 
     @Test
     @DisplayName("reverseString - maximum length boundary test")
     void reverseString_MaximumLengthBoundary_ExactlyAtLimit() {
-        String maxLength = "a".repeat(1000);
+        String maxLength = "a".repeat(10000);
         String result = stringService.reverseString(maxLength);
         assertEquals(maxLength, result);
     }
-
 
     @Test
     @DisplayName("shiftString - memory stress with large unicode")
@@ -398,7 +320,7 @@ class StringServiceTest {
         }
     }
 
-// ==================== Edge Case Boundary Tests ====================
+    // ==================== Edge Case Boundary Tests ====================
 
     @Test
     @DisplayName("shiftString - single character with large shift")
@@ -435,7 +357,7 @@ class StringServiceTest {
         assertEquals(" \n\t tnetnoc \t\n ", stringService.reverseString(" \n\t content \t\n "));
     }
 
-// ==================== Integration and Complex Scenario Tests ====================
+    // ==================== Integration and Complex Scenario Tests ====================
 
     @Test
     @DisplayName("Integration - reverse then shift complex unicode")
@@ -487,41 +409,7 @@ class StringServiceTest {
         assertEquals("321gnitset", reversed);
     }
 
-// ==================== Error Message Validation Tests ====================
-
-    @Test
-    @DisplayName("Error messages - specific validation")
-    void errorMessages_SpecificValidation_CorrectText() {
-        // Test null error message
-        IllegalArgumentException nullEx = assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.reverseString(null)
-        );
-        assertEquals("String cannot by null", nullEx.getMessage()); // Note the typo in original
-
-        // Test empty error message
-        IllegalArgumentException emptyEx = assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.reverseString("")
-        );
-        assertEquals("String must contain at least 1 character", emptyEx.getMessage());
-
-        // Test whitespace error message
-        IllegalArgumentException whitespaceEx = assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.reverseString("   ")
-        );
-        assertEquals("String cannot contain only whitespace", whitespaceEx.getMessage());
-
-        // Test negative shift error message
-        IllegalArgumentException negativeEx = assertThrows(
-                IllegalArgumentException.class,
-                () -> stringService.shiftString("test", -1, "left")
-        );
-        assertEquals("Shifts cannot be negative", negativeEx.getMessage());
-    }
-
-// ==================== Sanitization Tests ====================
+    // ==================== Sanitization Tests ====================
 
     @Test
     @DisplayName("Sanitization - control character removal verification")
@@ -545,5 +433,155 @@ class StringServiceTest {
         String input = "start\0\tmiddle\1\nend\2";
         String expected = "dne\nelddim\ttrats"; // After sanitization and reversal
         assertEquals(expected, stringService.reverseString(input));
+    }
+
+    // ==================== Exception Tests ====================
+//normalizingDirection test, must change to public when testing
+/*
+    @Test
+    @DisplayName("shiftString - invalid direction triggers dead code path")
+    void shiftString_InvalidDirection_ThrowsIllegalArgumentException() {
+        // This tests the theoretically unreachable default case in normalizingDirection
+        // We need to bypass the DTO validation by calling the service directly
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    // Call normalizingDirection directly with invalid input
+                    // This simulates the dead code path
+                    String normalized = stringService.normalizingDirection("completely_invalid_direction_that_would_never_pass_dto_validation");
+                    // If we get here, test should fail
+                    fail("Expected IllegalArgumentException but got: " + normalized);
+                }
+        );
+        assertEquals("Direction must be 'left'/'l' or 'right'/'r'", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("normalizingDirection - whitespace-only direction")
+    void normalizingDirection_WhitespaceOnly_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> stringService.normalizingDirection("   ")
+        );
+        assertEquals("Direction must be 'left'/'l' or 'right'/'r'", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("normalizingDirection - empty string direction")
+    void normalizingDirection_EmptyString_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> stringService.normalizingDirection("")
+        );
+        assertEquals("Direction must be 'left'/'l' or 'right'/'r'", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("normalizingDirection - numeric direction")
+    void normalizingDirection_NumericDirection_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> stringService.normalizingDirection("123")
+        );
+        assertEquals("Direction must be 'left'/'l' or 'right'/'r'", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("normalizingDirection - special characters direction")
+    void normalizingDirection_SpecialCharactersDirection_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> stringService.normalizingDirection("@#$%^&*()")
+        );
+        assertEquals("Direction must be 'left'/'l' or 'right'/'r'", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Exception handling - multiple exception types")
+    void exceptionHandling_MultipleExceptionTypes_HandledCorrectly() {
+        // Test different scenarios that could cause different exceptions
+        assertThrows(IllegalArgumentException.class, () -> stringService.shiftString("", 1, "left"));
+        assertThrows(IllegalArgumentException.class, () -> stringService.shiftString("test", -1, "left"));
+        assertThrows(IllegalArgumentException.class, () -> stringService.normalizingDirection("invalid"));
+    }
+*/
+    @Test
+    @DisplayName("processShift - empty string causes ArithmeticException wrapped in IllegalArgumentException")
+    void processShift_EmptyString_ThrowsIllegalArgumentException() {
+        // This tests the catch block in processShift when input.length() is 0
+        // which would cause ArithmeticException in shifts % input.length()
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> stringService.shiftString("", 1, "left")
+        );
+        assertTrue(exception.getMessage().contains("Failed to shift string"));
+        assertTrue(exception.getCause() instanceof ArithmeticException);
+    }
+
+    @Test
+    @DisplayName("processShift - single character string")
+    void processShift_SingleCharacterString_WorksCorrectly() {
+        // Should not throw since 1 % 1 = 0, but shifts % 1 = 0
+        assertDoesNotThrow(() -> {
+            String result = stringService.shiftString("a", 1, "left");
+            assertEquals("a", result);
+        });
+    }
+
+    @Test
+    @DisplayName("processShift - large shift values normalization")
+    void processShift_LargeShiftValues_NormalizedCorrectly() {
+        // Test that large shift values are properly normalized
+        assertDoesNotThrow(() -> {
+            String result = stringService.shiftString("test", 1000000, "left");
+            assertNotNull(result);
+            // 1000000 % 4 = 0, so should return original
+            assertEquals("test", result);
+        });
+    }
+
+
+    @Test
+    @DisplayName("Exception chain - cause preserved")
+    void exceptionChain_CausePreserved() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> stringService.shiftString("", 1, "left")
+        );
+
+        assertNotNull(exception.getCause());
+        assertTrue(exception.getCause() instanceof ArithmeticException);
+    }
+
+
+    @Test
+    @DisplayName("Exception handling - performance impact")
+    void exceptionHandling_PerformanceImpact() {
+        // Test that exception handling doesn't significantly impact performance
+        long startTime = System.currentTimeMillis();
+
+        // Normal operation
+        for (int i = 0; i < 1000; i++) {
+            int shifts = i;
+            assertDoesNotThrow(() -> stringService.shiftString("test", shifts % 10, "left"));
+        }
+
+        long normalTime = System.currentTimeMillis() - startTime;
+
+        // Exception handling
+        startTime = System.currentTimeMillis();
+        for (int i = 0; i < 100; i++) {
+            try {
+                stringService.shiftString("test", -1, "left");
+            } catch (IllegalArgumentException e) {
+                // Expected
+            }
+        }
+
+        long exceptionTime = System.currentTimeMillis() - startTime;
+
+        // Exception handling should be reasonable (not more than 10x slower)
+        assertTrue(exceptionTime < normalTime * 10,
+                "Exception handling too slow: " + exceptionTime + "ms vs " + normalTime + "ms");
     }
 }

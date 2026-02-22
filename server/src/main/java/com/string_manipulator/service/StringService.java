@@ -48,6 +48,7 @@ public class StringService {
 
     }
 
+    //change to public when testing if needed
     private String normalizingDirection(String direction) {
 
         logger.info("Normalizing direction: {}", direction);
@@ -64,7 +65,8 @@ public class StringService {
                 logger.info("Normalized direction to right");
                 yield "right";
             }
-            default -> {//theoretically unreachable (dead code), but just in case
+            default -> {
+                //theoretically unreachable (dead code), but just in case and also to satisfy squiggly lines
                 logger.warn("Direction must be 'left'/'l' or 'right'/'r'");
                 throw new IllegalArgumentException("Direction must be 'left'/'l' or 'right'/'r'");
             }
