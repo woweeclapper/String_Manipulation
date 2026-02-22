@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-
-//todo: move structural constraints to dto layer
 @Service
 public class ArrayService {
     /* @author Joe Nguyen */
