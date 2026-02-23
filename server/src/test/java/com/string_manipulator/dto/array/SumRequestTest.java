@@ -19,8 +19,9 @@ class SumRequestTest {
 
     @BeforeEach
     void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            validator = factory.getValidator();
+        }
     }
 
     @Test
@@ -89,7 +90,7 @@ class SumRequestTest {
     @Test
     void shouldPassValidationWhenNumbersListHasExactlyMaxElements() {
         // Given
-        List<Number> maxElements = List.copyOf(new java.util.ArrayList<Number>() {{
+        List<Number> maxElements = List.copyOf(new java.util.ArrayList<>() {{
             for (int i = 0; i < 1000; i++) {
                 add(i);
             }
@@ -106,7 +107,7 @@ class SumRequestTest {
     @Test
     void shouldFailValidationWhenNumbersListExceedsMaxElements() {
         // Given
-        List<Number> tooManyElements = List.copyOf(new java.util.ArrayList<Number>() {{
+        List<Number> tooManyElements = List.copyOf(new java.util.ArrayList<>() {{
             for (int i = 0; i < 1001; i++) {
                 add(i);
             }
@@ -246,7 +247,7 @@ class SumRequestTest {
     @Test
     void shouldPassValidationWithMediumSizedList() {
         // Given
-        List<Number> mediumList = List.copyOf(new java.util.ArrayList<Number>() {{
+        List<Number> mediumList = List.copyOf(new java.util.ArrayList<>() {{
             for (int i = 0; i < 100; i++) {
                 add(i);
             }
