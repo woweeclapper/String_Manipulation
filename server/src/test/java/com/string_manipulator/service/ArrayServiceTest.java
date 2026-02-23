@@ -101,7 +101,7 @@ class ArrayServiceTest {
         int[] array = {1, 2, 3, 4, 5, 6};
         SeparationResult<Integer> result = arrayService.separateArray(array, "parity");
 
-        assertEquals(SeparationResult.SeparationType.PARITY, result.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.PARITY, result.separationType());
         assertArrayEquals(new Integer[]{2, 4, 6}, result.getEven().toArray(new Integer[0]));
         assertArrayEquals(new Integer[]{1, 3, 5}, result.getOdd().toArray(new Integer[0]));
     }
@@ -111,7 +111,7 @@ class ArrayServiceTest {
         int[] array = {-2, -1, 0, 1, 2};
         SeparationResult<Integer> result = arrayService.separateArray(array, "sign");
 
-        assertEquals(SeparationResult.SeparationType.SIGN, result.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.SIGN, result.separationType());
         assertArrayEquals(new Integer[]{0, 1, 2}, result.getPositive().toArray(new Integer[0]));
         assertArrayEquals(new Integer[]{-2, -1}, result.getNegative().toArray(new Integer[0]));
     }
@@ -121,10 +121,10 @@ class ArrayServiceTest {
         int[] array = {1, 2, 3, 4};
 
         SeparationResult<Integer> parityResult = arrayService.separateArray(array, "p");
-        assertEquals(SeparationResult.SeparationType.PARITY, parityResult.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.PARITY, parityResult.separationType());
 
         SeparationResult<Integer> signResult = arrayService.separateArray(array, "s");
-        assertEquals(SeparationResult.SeparationType.SIGN, signResult.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.SIGN, signResult.separationType());
     }
 
     // Separate Array Tests - Double
@@ -133,7 +133,7 @@ class ArrayServiceTest {
         double[] array = {1.0, 2.0, 3.0, 4.0};
         SeparationResult<Double> result = arrayService.separateArray(array, "parity");
 
-        assertEquals(SeparationResult.SeparationType.PARITY, result.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.PARITY, result.separationType());
         // Convert List<Double> to double[] manually
         List<Double> evenList = result.getEven();
         double[] evenArray = new double[evenList.size()];
@@ -156,7 +156,7 @@ class ArrayServiceTest {
         double[] array = {-2.0, -1.0, 0.0, 1.0, 2.0};
         SeparationResult<Double> result = arrayService.separateArray(array, "sign");
 
-        assertEquals(SeparationResult.SeparationType.SIGN, result.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.SIGN, result.separationType());
         // Convert List<Double> to double[] manually (with -0.0 handling)
         List<Double> positiveList = result.getPositive();
         double[] positiveArray = new double[positiveList.size()];
@@ -307,7 +307,7 @@ class ArrayServiceTest {
         int[] sorted = arrayService.sortArray(array, "ascending");
         SeparationResult<Integer> separated = arrayService.separateArray(sorted, "sign");
 
-        assertEquals(SeparationResult.SeparationType.SIGN, separated.getSeparationType());
+        assertEquals(SeparationResult.SeparationType.SIGN, separated.separationType());
         // Convert List<Integer> to int[] manually
         List<Integer> positiveList = separated.getPositive();
         int[] positiveArray = new int[positiveList.size()];

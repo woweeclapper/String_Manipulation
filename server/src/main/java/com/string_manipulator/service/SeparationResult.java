@@ -4,42 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+//Changed to record, change back if something breaks
 // Enhanced SeparationResult with better type safety
-public class SeparationResult<T> {
-    private final ArrayList<T> first;
-    private final ArrayList<T> second;
-    private final SeparationType separationType;
-
-    public enum SeparationType {
-        PARITY("parity"),
-        SIGN("sign");
-
-        private final String value;
-
-        SeparationType(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public static SeparationType fromString(String value) {
-            for (SeparationType type : values()) {
-                if (type.value.equals(value)) {
-                    return type;
-                }
-            }
-            throw new IllegalArgumentException("Unknown separation type: " + value);
-        }
-    }
-
-    public SeparationResult(ArrayList<T> first, ArrayList<T> second, SeparationType separationType) {
-        this.first = first;
-        this.second = second;
-        this.separationType = separationType;
-    }
-
+public record SeparationResult<T>(ArrayList<T> first, ArrayList<T> second, SeparationType separationType) {
     // Type-safe getters with proper validation
     public List<T> getEven() {
         validateSeparationType(SeparationType.PARITY);
@@ -70,9 +37,28 @@ public class SeparationResult<T> {
         }
     }
 
-    // Generic getters
-    public ArrayList<T> getFirst() { return first; }
-    public ArrayList<T> getSecond() { return second; }
-    public SeparationType getSeparationType() { return separationType; }
+    public enum SeparationType {
+        PARITY("parity"),
+        SIGN("sign");
+
+        private final String value;
+
+        SeparationType(String value) {
+            this.value = value;
+        }
+
+        public static SeparationType fromString(String value) {
+            for (SeparationType type : values()) {
+                if (type.value.equals(value)) {
+                    return type;
+                }
+            }
+            throw new IllegalArgumentException("Unknown separation type: " + value);
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 }
 

@@ -1,10 +1,16 @@
 package com.string_manipulator.util;
 
-import java.util.ArrayList;
+import java.util.List;
 
+
+/*Change the data structure to List instead of ArrayList, change back if something breaks*/
 public class SeparateArray {
 
-    public static void separateEvenAndOdd(int[] array, ArrayList<Integer> evenNumbers, ArrayList<Integer> oddNumbers) {
+    private SeparateArray() {
+        /* This utility class should not be instantiated */
+    }
+
+    public static void separateEvenAndOdd(int[] array, List<Integer> evenNumbers, List<Integer> oddNumbers) {
         for (int num : array) {
             if (num % 2 == 0) {
                 evenNumbers.add(num);
@@ -14,7 +20,7 @@ public class SeparateArray {
         }
     }
 
-    public static void separateEvenAndOdd(double[] array, ArrayList<Double> evenNumbers, ArrayList<Double> oddNumbers) {
+    public static void separateEvenAndOdd(double[] array, List<Double> evenNumbers, List<Double> oddNumbers) {
         for (double num : array) {
             if (num % 2 == 0) {
                 evenNumbers.add(num);
@@ -24,7 +30,7 @@ public class SeparateArray {
         }
     }
 
-    public static void separatePositiveAndNegative(int[] array, ArrayList<Integer> positiveNumbers, ArrayList<Integer> negativeNumbers) {
+    public static void separatePositiveAndNegative(int[] array, List<Integer> positiveNumbers, List<Integer> negativeNumbers) {
         for (int num : array) {
             if (num >= 0) {
                 positiveNumbers.add(num);
@@ -34,9 +40,11 @@ public class SeparateArray {
         }
     }
 
-    public static void separatePositiveAndNegative(double[] array, ArrayList<Double> positiveNumbers, ArrayList<Double> negativeNumbers) {
+    //added in to handle negative zero
+    //may have to move it to service layer since this is a validation
+    public static void separatePositiveAndNegative(double[] array, List<Double> positiveNumbers, List<Double> negativeNumbers) {
         for (double num : array) {
-            if (num >= 0) {
+            if (num > 0 || (num == 0.0 && Double.doubleToLongBits(num) >= 0)) {
                 positiveNumbers.add(num);
             } else {
                 negativeNumbers.add(num);

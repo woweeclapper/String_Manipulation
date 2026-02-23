@@ -103,7 +103,7 @@ public class ArrayController {
             // Convert arrays back to List<Integer>
             List<Integer> first;
             List<Integer> second;
-            if (result.getSeparationType() == SeparationResult.SeparationType.PARITY) {
+            if (result.separationType() == SeparationResult.SeparationType.PARITY) {
                 first = result.getEven();
                 second = result.getOdd();
             } else {
@@ -111,7 +111,7 @@ public class ArrayController {
                 second = result.getNegative();
             }
 
-            return new IntSepResponses(first, second, result.getSeparationType().getValue());
+            return new IntSepResponses(first, second, result.separationType().getValue());
         }
 
         // Otherwise treat as double[]
@@ -123,7 +123,7 @@ public class ArrayController {
 
         List<Double> first;
         List<Double> second;
-        if (result.getSeparationType() == SeparationResult.SeparationType.PARITY) {
+        if (result.separationType() == SeparationResult.SeparationType.PARITY) {
             first = result.getEven();
             second = result.getOdd();
         } else {
@@ -131,7 +131,7 @@ public class ArrayController {
             second = result.getNegative();
         }
 
-        return new DoubleSepResponse(first, second, result.getSeparationType().getValue());
+        return new DoubleSepResponse(first, second, result.separationType().getValue());
     }
-    
+
 }
