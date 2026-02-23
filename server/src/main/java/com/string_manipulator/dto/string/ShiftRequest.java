@@ -1,14 +1,17 @@
 package com.string_manipulator.dto.string;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
 public record ShiftRequest(
         @NotBlank(message = "Text cannot be blank")
         @Size(max = 10000, message = "Text cannot exceed 10000 characters")
         String text,
 
-        @NotNull(message = "Number of shifts cannot be null")
-        @Min(value = 0, message = "Number of shifts cannot be negative")
+
+        @PositiveOrZero(message = "Number of shifts cannot be negative")
         int numOfShifts,
 
         @NotBlank(message = "Direction cannot be blank")
