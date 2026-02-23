@@ -1,5 +1,6 @@
 package com.string_manipulator.service;
 
+import com.string_manipulator.util.SeparateArray;
 import com.string_manipulator.util.SortingArray;
 import com.string_manipulator.util.sum_logic.DoubleSumArray;
 import com.string_manipulator.util.sum_logic.RecursiveSumArray;
@@ -192,8 +193,8 @@ public class ArrayService {
         SeparationResult.SeparationType type = SeparationResult.SeparationType.fromString(separationType);
 
         switch (type) {
-            case PARITY -> SortingArray.separateEvenAndOdd(array, first, second);
-            case SIGN -> SortingArray.separatePositiveAndNegative(array, first, second);
+            case PARITY -> SeparateArray.separateEvenAndOdd(array, first, second);
+            case SIGN -> SeparateArray.separatePositiveAndNegative(array, first, second);
         }
 
         return new SeparationResult<>(first, second, type);
@@ -207,9 +208,9 @@ public class ArrayService {
 
         //technically the same code as above, but it's here for *VARIETY* LOL
         if (type == SeparationResult.SeparationType.PARITY) {
-            SortingArray.separateEvenAndOdd(array, first, second);
+            SeparateArray.separateEvenAndOdd(array, first, second);
         } else if (type == SeparationResult.SeparationType.SIGN) {
-            SortingArray.separatePositiveAndNegative(array, first, second);
+            SeparateArray.separatePositiveAndNegative(array, first, second);
         }
         return new SeparationResult<>(first, second, type);
     }
