@@ -7,13 +7,14 @@ import java.util.Arrays;
 
 public class SortingArray {
 
-
+//call sort methods to sort small to big
     public static int[] sortAscending(int[] array) {
         int[] sortedArray = Arrays.copyOf(array, array.length);
         Arrays.sort(sortedArray);
         return sortedArray;
     }
 
+//reverse whatever in ascending to get descending
     public static int[] sortDescending(int[] array) {
         int[] sortedArray = sortAscending(array);
         int last = sortedArray.length - 1;
