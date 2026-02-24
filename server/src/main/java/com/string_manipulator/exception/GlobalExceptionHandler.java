@@ -87,6 +87,26 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> handleServiceState(
+            IllegalStateException ex, WebRequest request) {
+
+        String requestUri = request.getDescription(false)
+                .replace("uri=", "");
+
+        logger.warn("Service state error - URI: {}, Error: {}",
+                requestUri, ex.getMessage());
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid State",
+                "Service state failed",
+                List.of(ex.getMessage())
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedErrors(
             Exception ex, WebRequest request) {
