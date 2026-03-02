@@ -1,4 +1,5 @@
 package com.string_manipulator.util;
+
 import java.util.List;
 
 import static com.string_manipulator.util.GraphemeCluster.splitIntoGraphemes;
@@ -6,6 +7,10 @@ import static com.string_manipulator.util.GraphemeCluster.splitIntoGraphemes;
 /* @author Joe Nguyen */
 
 public class ReverseString {
+
+    private ReverseString() {
+        /* This utility class should not be instantiated */
+    }
 
     public static String reverse(String text) {
         List<String> graphemes = splitIntoGraphemes(text);
