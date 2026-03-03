@@ -6,10 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
 
@@ -18,6 +22,7 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    // Client errors from validation (400) - handled by @ControllerAdvice
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationErrors(
             MethodArgumentNotValidException ex, WebRequest request) {
@@ -47,6 +52,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    // Client errors from malformed JSON (400) - handled by @ControllerAdvice
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleMalformedJson(
             HttpMessageNotReadableException ex, WebRequest request) {
@@ -66,6 +72,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    // Business logic errors (400) - handled by @ControllerAdvice when they come from code
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleServiceValidation(
             IllegalArgumentException ex, WebRequest request) {
@@ -108,15 +115,15 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleUnexpectedErrors(
-            Exception ex, WebRequest request) {
-
+    public ResponseEntity<ErrorResponse> handleUnexpectedErrors(Exception ex, WebRequest request) throws Exception {
+        if (isSpringFrameworkException(ex)) {
+            throw ex; // Re-throw to let Spring handle them
+        }
         String requestUri = request.getDescription(false).replace("uri=", "");
         String userAgent = request.getHeader("User-Agent");
 
         logger.error("Unexpected error - URI: {}, User-Agent: {}, Error: {}",
                 requestUri, userAgent, ex.getMessage(), ex);
-
 
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -127,4 +134,13 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    private boolean isSpringFrameworkException(Exception ex) {
+        return ex instanceof HttpRequestMethodNotSupportedException ||
+                ex instanceof NoHandlerFoundException ||
+                ex instanceof HttpMediaTypeNotSupportedException ||
+                ex instanceof HttpMediaTypeNotAcceptableException;
+    }
+
 }
+

@@ -8,11 +8,16 @@ import com.string_manipulator.dto.string.ShiftResponse;
 import com.string_manipulator.service.StringService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -36,6 +41,14 @@ class StringControllerTest {
     // ========================================
     // 1. Happy-Path Tests
     // ========================================
+
+    private static Stream<Arguments> malformedJsonRequestProvider() {
+        return Stream.of(
+                Arguments.of("/api/string/reverse", "{\"text\":[]}", "text is array"),
+                Arguments.of("/api/string/reverse", "{\"text\":{}}", "text is object"),
+                Arguments.of("/api/string/shift", "{\"text\":\"hello\",\"numOfShifts\":\"two\",\"direction\":\"left\"}", "numOfShifts is not integer")
+        );
+    }
 
     @Test
     @DisplayName("POST /api/string/reverse should return 200 OK with valid input")
@@ -61,6 +74,9 @@ class StringControllerTest {
         verifyNoMoreInteractions(stringService);
     }
 
+    // ========================================
+    // 2. DTO Validation Tests
+    // ========================================
 
     @Test
     @DisplayName("POST /api/string/shift should return 200 OK with valid input")
@@ -86,10 +102,6 @@ class StringControllerTest {
         verify(stringService, times(1)).shiftString("hello", 2, "left");
         verifyNoMoreInteractions(stringService);
     }
-
-    // ========================================
-    // 2. DTO Validation Tests
-    // ========================================
 
     @Test
     @DisplayName("POST /api/string/reverse should return 400 when text is blank")
@@ -205,6 +217,10 @@ class StringControllerTest {
         verifyNoInteractions(stringService);
     }
 
+    // ========================================
+    // 3. JSON Type Mismatch Tests
+    // ========================================
+
     @Test
     @DisplayName("POST /api/string/shift should return 400 when direction is invalid")
     void shift_shouldReturn400_whenDirectionIsInvalid() throws Exception {
@@ -223,10 +239,6 @@ class StringControllerTest {
         verifyNoInteractions(stringService);
     }
 
-    // ========================================
-    // 3. JSON Type Mismatch Tests
-    // ========================================
-
     @Test
     @DisplayName("POST /api/string/reverse should accept numeric JSON values as strings")
     void reverse_shouldAcceptNumericValues() throws Exception {
@@ -243,49 +255,12 @@ class StringControllerTest {
         verify(stringService).reverseString("123");
     }
 
-
-    @Test
-    @DisplayName("POST /api/string/reverse should return 400 when text is an array")
-    void reverse_shouldReturn400_whenTextIsArray() throws Exception {
-        // Given
-        String json = "{\"text\":[]}";
-
+    @ParameterizedTest
+    @MethodSource("malformedJsonRequestProvider")
+    @DisplayName("Should return 400 for malformed JSON requests")
+    void shouldReturn400_whenJsonIsMalformed(String endpoint, String json) throws Exception {
         // When & Then
-        mockMvc.perform(post("/api/string/reverse")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.error").value("Malformed JSON"));
-
-        verifyNoInteractions(stringService);
-    }
-
-    @Test
-    @DisplayName("POST /api/string/reverse should return 400 when text is an object")
-    void reverse_shouldReturn400_whenTextIsObject() throws Exception {
-        // Given
-        String json = "{\"text\":{}}";
-
-        // When & Then
-        mockMvc.perform(post("/api/string/reverse")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.error").value("Malformed JSON"));
-
-        verifyNoInteractions(stringService);
-    }
-
-    @Test
-    @DisplayName("POST /api/string/shift should return 400 when numOfShifts is not an integer")
-    void shift_shouldReturn400_whenNumOfShiftsIsNotInteger() throws Exception {
-        // Given
-        String json = "{\"text\":\"hello\",\"numOfShifts\":\"two\",\"direction\":\"left\"}";
-
-        // When & Then
-        mockMvc.perform(post("/api/string/shift")
+        mockMvc.perform(post(endpoint)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
@@ -468,6 +443,7 @@ class StringControllerTest {
 
         verify(stringService, times(1)).shiftString("test", 1, "left");
     }
+
 
     @Test
     @DisplayName("GET /api/string/reverse should return 405 Method Not Allowed")
