@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 
+//Todo: integration tests
+//Todo: e2e tests
 @RestController
 @RequestMapping("/api/array")
 public class ArrayController {
