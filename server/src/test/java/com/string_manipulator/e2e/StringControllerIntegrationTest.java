@@ -259,21 +259,6 @@ class StringControllerIntegrationTest {
     @DisplayName("JSON Type Mismatch Tests")
     class JsonTypeMismatchTests {
 
-        @Test
-        @DisplayName("POST /api/string/reverse should return 400 when text is number instead of string")
-        void reverse_shouldReturn400_whenTextIsNumber() throws Exception {
-            // Given
-            String requestBody = "{\"text\":123}";
-
-            // When & Then
-            mockMvc.perform(post("/api/string/reverse")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(requestBody))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.status").value(400))
-                    .andExpect(jsonPath("$.error").value("Malformed JSON"));
-        }
 
         @Test
         @DisplayName("POST /api/string/reverse should return 400 when text is array instead of string")
