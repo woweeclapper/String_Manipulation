@@ -56,6 +56,27 @@ class ArrayControllerTest {
     class HappyPathTests {
 
         @Test
+        @DisplayName("POST /api/array/sort - Single element should return 200 and correct response")
+        void sortSingleElement_ShouldReturn200AndCorrectResponse() throws Exception {
+            // Arrange
+            SortRequest singleRequest = new SortRequest(Arrays.asList(42), "ascending");
+            when(arrayService.sortArray(any(int[].class), anyString())).thenReturn(new int[]{42});
+
+            // Act & Assert
+            mockMvc.perform(post("/api/array/sort")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(singleRequest)))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.sorted").isArray())
+                    .andExpect(jsonPath("$.sorted", hasSize(1)))
+                    .andExpect(jsonPath("$.sorted[0]").value(42))
+                    .andExpect(jsonPath("$.orderType").value("ascending"));
+
+            verify(arrayService, times(1)).sortArray(any(int[].class), eq("ascending"));
+        }
+
+        @Test
         @DisplayName("POST /api/array/sum - Integer array should return 200 and correct response")
         void sumIntegerArray_ShouldReturn200AndCorrectResponse() throws Exception {
             // Arrange

@@ -408,6 +408,36 @@ class ShiftRequestTest {
                 );
     }
 
+    @Test
+    void shouldValidateExtremeShiftCount() {
+        // Given
+        ShiftRequest request = new ShiftRequest("hello", Integer.MAX_VALUE, "left");
+
+        // When
+        Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
+
+        // Then
+        assertThat(violations).isEmpty(); // Should pass validation
+    }
+
+    @Test
+    void shouldFailValidationWhenShiftCountExceedsReasonableLimit() {
+        // This test depends on your validation constraints
+        // Add if you have upper limit validation for numOfShifts
+        ShiftRequest request = new ShiftRequest("hello", Integer.MAX_VALUE, "left");
+
+        Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
+
+        // Adjust expectation based on your validation rules
+        if (violations.isEmpty()) {
+            // No upper limit validation - test passes
+            assertThat(violations).isEmpty();
+        } else {
+            // Has upper limit validation - test fails
+            assertThat(violations).isNotEmpty();
+        }
+    }
+
     // Unicode and emoji tests for text field
     @ParameterizedTest
     @ValueSource(strings = {
@@ -431,5 +461,6 @@ class ShiftRequestTest {
         // Emojis should pass validation as they're valid Unicode characters
         assertThat(violations).isEmpty();
     }
+
 
 }

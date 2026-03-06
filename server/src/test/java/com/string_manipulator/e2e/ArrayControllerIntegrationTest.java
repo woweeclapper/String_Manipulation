@@ -795,5 +795,199 @@ class ArrayControllerIntegrationTest {
                     .andExpect(jsonPath("$.sorted", hasSize(3)))
                     .andExpect(jsonPath("$.orderType").value("d"));
         }
+
+        @Test
+        @DisplayName("POST /api/array/sort should handle single element descending")
+        void sort_shouldHandleSingleElementDescending() throws Exception {
+            // Given
+            String requestBody = "{\"numbersList\":[42],\"orderType\":\"descending\"}";
+
+            // When & Then
+            mockMvc.perform(post("/api/array/sort")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.sorted").isArray())
+                    .andExpect(jsonPath("$.sorted", hasSize(1)))
+                    .andExpect(jsonPath("$.sorted[0]").value(42))
+                    .andExpect(jsonPath("$.orderType").value("descending"));
+        }
+
+        @Test
+        @DisplayName("POST /api/array/sum should handle arrays with only even numbers")
+        void sum_shouldHandleOnlyEvenNumbers() throws Exception {
+            // Given
+            String requestBody = "{\"numbersList\":[2,4,6,8]}";
+
+            // When & Then
+            mockMvc.perform(post("/api/array/sum")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.sum").value(20.0))
+                    .andExpect(jsonPath("$.length()").value(1));
+        }
+
+        @Test
+        @DisplayName("POST /api/array/sort should handle arrays with only even numbers")
+        void sort_shouldHandleOnlyEvenNumbers() throws Exception {
+            // Given
+            String requestBody = "{\"numbersList\":[8,4,6,2],\"orderType\":\"ascending\"}";
+
+            // When & Then
+            mockMvc.perform(post("/api/array/sort")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.sorted").isArray())
+                    .andExpect(jsonPath("$.sorted", hasSize(4)))
+                    .andExpect(jsonPath("$.sorted", contains(2, 4, 6, 8)))
+                    .andExpect(jsonPath("$.orderType").value("ascending"));
+        }
+
+        @Test
+        @DisplayName("POST /api/array/separate should handle arrays with all even numbers")
+        void separate_shouldHandleAllEvenNumbers() throws Exception {
+            // Given
+            String requestBody = "{\"numberList\":[2,4,6,8],\"separationType\":\"parity\"}";
+
+            // When & Then
+            mockMvc.perform(post("/api/array/separate")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.firstGroup").isArray())
+                    .andExpect(jsonPath("$.firstGroup", hasSize(4)))
+                    .andExpect(jsonPath("$.firstGroup", containsInAnyOrder(2, 4, 6, 8)))
+                    .andExpect(jsonPath("$.secondGroup").isArray())
+                    .andExpect(jsonPath("$.secondGroup", hasSize(0))) // Empty odd group
+                    .andExpect(jsonPath("$.separationType").value("parity"));
+        }
+
+        @Test
+        @DisplayName("POST /api/array/sum should handle arrays with only odd numbers")
+        void sum_shouldHandleOnlyOddNumbers() throws Exception {
+            // Given
+            String requestBody = "{\"numbersList\":[1,3,5,7]}";
+
+            // When & Then
+            mockMvc.perform(post("/api/array/sum")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.sum").value(16.0))
+                    .andExpect(jsonPath("$.length()").value(1));
+        }
+
+        @Test
+        @DisplayName("POST /api/array/separate should handle arrays with all odd numbers")
+        void separate_shouldHandleAllOddNumbers() throws Exception {
+            // Given
+            String requestBody = "{\"numberList\":[1,3,5,7],\"separationType\":\"parity\"}";
+
+            // When & Then
+            mockMvc.perform(post("/api/array/separate")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.firstGroup").isArray())
+                    .andExpect(jsonPath("$.firstGroup", hasSize(0))) // Empty even group
+                    .andExpect(jsonPath("$.secondGroup").isArray())
+                    .andExpect(jsonPath("$.secondGroup", hasSize(4)))
+                    .andExpect(jsonPath("$.secondGroup", containsInAnyOrder(1, 3, 5, 7)))
+                    .andExpect(jsonPath("$.separationType").value("parity"));
+        }
+
+        @Test
+        @DisplayName("POST /api/array/sort should handle arrays with all negative numbers")
+        void sort_shouldHandleAllNegativeNumbers() throws Exception {
+            // Given
+            String requestBody = "{\"numbersList\":[-4,-1,-3,-2],\"orderType\":\"ascending\"}";
+
+            // When & Then
+            mockMvc.perform(post("/api/array/sort")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.sorted").isArray())
+                    .andExpect(jsonPath("$.sorted", hasSize(4)))
+                    .andExpect(jsonPath("$.sorted", contains(-4, -3, -2, -1)))
+                    .andExpect(jsonPath("$.orderType").value("ascending"));
+        }
+
+        @Test
+        @DisplayName("POST /api/array/separate should handle arrays with all negative numbers")
+        void separate_shouldHandleAllNegativeNumbers() throws Exception {
+            // Given
+            String requestBody = "{\"numberList\":[-1,-2,-3,-4],\"separationType\":\"sign\"}";
+
+            // When & Then
+            mockMvc.perform(post("/api/array/separate")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.firstGroup").isArray())
+                    .andExpect(jsonPath("$.firstGroup", hasSize(0))) // Empty positive group
+                    .andExpect(jsonPath("$.secondGroup").isArray())
+                    .andExpect(jsonPath("$.secondGroup", hasSize(4)))
+                    .andExpect(jsonPath("$.secondGroup", containsInAnyOrder(-1, -2, -3, -4)))
+                    .andExpect(jsonPath("$.separationType").value("sign"));
+        }
+
+        @Test
+        @DisplayName("POST /api/array/sort should handle very large arrays")
+        void sort_shouldHandleLargeArrays() throws Exception {
+            // Given - create array with 1000 elements in reverse order for sorting test
+            StringBuilder jsonBuilder = new StringBuilder("{\"numbersList\":[");
+            for (int i = 0; i < 1000; i++) {
+                if (i > 0) jsonBuilder.append(",");
+                jsonBuilder.append(1000 - i); // Reverse order: 1000, 999, 998, ...
+            }
+            jsonBuilder.append("],\"orderType\":\"ascending\"}");
+            String requestBody = jsonBuilder.toString();
+
+            // When & Then
+            mockMvc.perform(post("/api/array/sort")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.sorted").isArray())
+                    .andExpect(jsonPath("$.sorted", hasSize(1000)))
+                    .andExpect(jsonPath("$.orderType").value("ascending"));
+        }
+
+        @Test
+        @DisplayName("POST /api/array/separate should handle very large arrays")
+        void separate_shouldHandleLargeArrays() throws Exception {
+            // Given - create array with 1000 sequential elements
+            StringBuilder jsonBuilder = new StringBuilder("{\"numberList\":[");
+            for (int i = 0; i < 1000; i++) {
+                if (i > 0) jsonBuilder.append(",");
+                jsonBuilder.append(i);
+            }
+            jsonBuilder.append("],\"separationType\":\"parity\"}");
+            String requestBody = jsonBuilder.toString();
+
+            // When & Then
+            mockMvc.perform(post("/api/array/separate")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.firstGroup").isArray())
+                    .andExpect(jsonPath("$.secondGroup").isArray())
+                    .andExpect(jsonPath("$.firstGroup", hasSize(500))) // 500 even numbers (0, 2, 4, ...)
+                    .andExpect(jsonPath("$.secondGroup", hasSize(500))) // 500 odd numbers (1, 3, 5, ...)
+                    .andExpect(jsonPath("$.separationType").value("parity"));
+        }
     }
 }

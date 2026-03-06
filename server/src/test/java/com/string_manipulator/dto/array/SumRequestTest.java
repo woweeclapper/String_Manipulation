@@ -260,4 +260,82 @@ class SumRequestTest {
         // Then
         assertThat(violations).isEmpty();
     }
+
+    @Test
+    void shouldPassValidationWithOnlyEvenNumbers() {
+        // Given
+        List<Number> evenNumbers = List.of(2, 4, 6, 8);
+        SumRequest request = new SumRequest(evenNumbers);
+
+        // When
+        Set<ConstraintViolation<SumRequest>> violations = validator.validate(request);
+
+        // Then
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    void shouldPassValidationWithOnlyOddNumbers() {
+        // Given
+        List<Number> oddNumbers = List.of(1, 3, 5, 7);
+        SumRequest request = new SumRequest(oddNumbers);
+
+        // When
+        Set<ConstraintViolation<SumRequest>> violations = validator.validate(request);
+
+        // Then
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    void shouldPassValidationWithBoundaryValues() {
+        // Given
+        List<Number> boundaryValues = List.of(Integer.MAX_VALUE, Integer.MIN_VALUE);
+        SumRequest request = new SumRequest(boundaryValues);
+
+        // When
+        Set<ConstraintViolation<SumRequest>> violations = validator.validate(request);
+
+        // Then
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    void shouldPassValidationWithDecimalPrecision() {
+        // Given
+        List<Number> decimalNumbers = List.of(0.1, 0.2, 0.3);
+        SumRequest request = new SumRequest(decimalNumbers);
+
+        // When
+        Set<ConstraintViolation<SumRequest>> violations = validator.validate(request);
+
+        // Then
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    void shouldPassValidationWithScientificNotation() {
+        // Given
+        List<Number> scientificNumbers = List.of(1e10, 1e-10, 1.5e5);
+        SumRequest request = new SumRequest(scientificNumbers);
+
+        // When
+        Set<ConstraintViolation<SumRequest>> violations = validator.validate(request);
+
+        // Then
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    void shouldPassValidationWithZeroRepresentations() {
+        // Given
+        List<Number> zeroNumbers = List.of(0, -0, 0.0, -0.0);
+        SumRequest request = new SumRequest(zeroNumbers);
+
+        // When
+        Set<ConstraintViolation<SumRequest>> violations = validator.validate(request);
+
+        // Then
+        assertThat(violations).isEmpty();
+    }
 }
