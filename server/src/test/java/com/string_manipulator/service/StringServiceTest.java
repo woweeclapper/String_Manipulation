@@ -436,7 +436,7 @@ class StringServiceTest {
     }
 
     // ==================== Exception Tests ====================
-//normalizingDirection test, must change to public when testing
+//normalizingDirection test, must change method to public when testing
 /*
     @Test
     @DisplayName("shiftString - invalid direction triggers dead code path")
