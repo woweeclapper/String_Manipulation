@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 
-//Todo: e2e tests
 @RestController
 @RequestMapping("/api/array")
 public class ArrayController {
@@ -70,7 +69,7 @@ public class ArrayController {
 
             return new IntSortResponse(
                     Arrays.stream(sorted).boxed().toList(),
-                    request.orderType());
+                    request.orderType().toLowerCase());
         }
 
         double[] arr = values.stream().mapToDouble(Number::doubleValue).toArray();
@@ -78,7 +77,7 @@ public class ArrayController {
 
         return new DoubleSortResponse(
                 Arrays.stream(sorted).boxed().toList(),
-                request.orderType());
+                request.orderType().toLowerCase());
     }
 
     @PostMapping(
