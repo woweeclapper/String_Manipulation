@@ -251,7 +251,8 @@ curl -X POST http://localhost:8080/api/array/sort \
 - [x] Update from Java 14 to Java 21
 - [x] Refactoring current project into a functional Backend
 - [ ] Frontend will be design in vanilla html/css/js which will also double as a portfolio website showcasing other works
-- [ ] Spring Boot will be implemented into Backend once refactoring is done
+- [x] Spring Boot will be implemented into Backend once refactoring is done
+- [ ] Dockerized the production-ready backend for development
 
 ## Hosting
 
