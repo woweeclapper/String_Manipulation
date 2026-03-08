@@ -1,0 +1,10 @@
+/* Add this to your existing ArrayPanel.css */
+.array-card .highlight {
+  font-family: "Courier New", Courier, monospace;
+  background: #2d3436;
+  color: #55efc4;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  text-align: left;
+}

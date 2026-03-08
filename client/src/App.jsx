@@ -1,6 +1,10 @@
 import StringPanel from "./features/StringOperations/StringPanel";
+import ArrayPanel from "./features/ArrayOperations/ArrayPanel";
 import "./App.css"; // Global layout styles
 
+{
+  /*TODO: Styling and Layout post implmentation */
+}
 function App() {
   return (
     <div className="app-container">
@@ -12,8 +16,7 @@ function App() {
       <main>
         {/*where components are Hooked Up */}
         <StringPanel />
-
-        {/* Add <ArrayPanel /> here */}
+        <ArrayPanel />
       </main>
 
       <footer className="app-footer">
