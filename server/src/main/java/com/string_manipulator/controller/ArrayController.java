@@ -87,7 +87,7 @@ public class ArrayController {
     )
     public Object separate(@Valid @RequestBody SeparationRequest request) {
 
-        List<Number> values = request.numberList();
+        List<Number> values = request.numbersList();
 
         boolean allIntegers = values.stream()
                 .allMatch(Integer.class::isInstance);
