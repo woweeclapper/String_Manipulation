@@ -71,7 +71,7 @@ Separates numbers based on parity (even/odd) or sign (positive/negative).
 **Request DTO:** `SeparationRequest`
 ```json
 {
-  "numberList": [1, 2, -3, 4, -5],
+  "numbersList": [1, 2, -3, 4, -5],
   "separationType": "PARITY" // or "SIGN"
 }
 ```
