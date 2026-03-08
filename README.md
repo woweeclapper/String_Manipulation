@@ -258,7 +258,7 @@ curl -X POST http://localhost:8080/api/array/sort \
 
 - [x] Update from Java 14 to Java 21
 - [x] Refactoring current project into a functional Backend
-- [x] Frontend designed in React + Vite which will also double as a portfolio website showcasing other works
+- [x] Frontend designed in React + Vite in the form of dash board
 - [x] Spring Boot will be implemented into Backend once refactoring is done
 - [ ] Dockerized the production-ready backend for development
 
