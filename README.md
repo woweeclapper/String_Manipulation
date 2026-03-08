@@ -128,7 +128,7 @@ Shifts characters in a string left or right by specified positions.
 ## Request DTOs
 
 ### Array DTOs
-- **`SumRequest`**: List of numbers (integers/doubles) to sum
+- **`SumRequest`**: List of numbers to sum
 - **`SortRequest`**: List of numbers + sort order (ASCENDING/DESCENDING)
 - **`SeparationRequest`**: List of numbers + separation type (PARITY/SIGN)
 
