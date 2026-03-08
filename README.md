@@ -13,8 +13,8 @@ The project has been completely refactored into a modern REST API using Spring B
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   Backend API   │    │   Services      │
-│   (Vanilla      │◄──►│   (Spring Boot) │◄──►│   (Business     │
-│   HTML/CSS/JS)  │    │   REST API)     │    │    Logic)       │
+│   (React +      │◄──►│   (Spring Boot) │◄──►│   (Business     │
+│   Vite)         │    │   REST API)     │    │    Logic)       │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                               │
                               ▼
@@ -238,7 +238,8 @@ curl -X POST http://localhost:8080/api/array/sort \
 
 ## Technology Stack
 
-- **Backend**: Spring Boot 4.0.2
+### Backend
+- **Framework**: Spring Boot 4.0.2
 - **Java Version**: 21
 - **Build Tool**: Maven
 - **Validation**: Jakarta Bean Validation
@@ -246,11 +247,18 @@ curl -X POST http://localhost:8080/api/array/sort \
 - **Testing**: JUnit 5, AssertJ, Mockito
 - **Code Coverage**: JaCoCo
 
+### Frontend
+- **Framework**: React 19.2.0
+- **Build Tool**: Vite 7.3.1
+- **Language**: JavaScript
+- **Linting**: ESLint
+- **Type Checking**: TypeScript (for React types)
+
 ## Goals and Future Development
 
 - [x] Update from Java 14 to Java 21
 - [x] Refactoring current project into a functional Backend
-- [ ] Frontend will be design in vanilla html/css/js which will also double as a portfolio website showcasing other works
+- [x] Frontend designed in React + Vite which will also double as a portfolio website showcasing other works
 - [x] Spring Boot will be implemented into Backend once refactoring is done
 - [ ] Dockerized the production-ready backend for development
 
@@ -264,8 +272,10 @@ curl -X POST http://localhost:8080/api/array/sort \
 ### Prerequisites
 - Java 21
 - Maven 3.6+
+- Node.js 18+ (for frontend)
+- npm or yarn
 
-### Running the Application
+### Running the Backend
 ```bash
 cd server
 mvn spring-boot:run
@@ -273,10 +283,26 @@ mvn spring-boot:run
 
 The API will be available at `http://localhost:8080`
 
+### Running the Frontend
+```bash
+cd client
+npm install
+npm run dev
+```
+
+The React application will be available at `http://localhost:5173`
+
 ### Running Tests
+**Backend Tests:**
 ```bash
 cd server
 mvn test
+```
+
+**Frontend Tests:**
+```bash
+cd client
+npm run lint
 ```
 
 ### Code Coverage Report
@@ -284,5 +310,19 @@ mvn test
 cd server
 mvn jacoco:report
 ```
-View the report at `target/site/jacoco/index.html`
+View the report at `server/target/site/jacoco/index.html`
+
+### Building for Production
+**Backend:**
+```bash
+cd server
+mvn clean package
+```
+
+**Frontend:**
+```bash
+cd client
+npm run build
+```
+The built files will be in the `client/dist` directory.
   
