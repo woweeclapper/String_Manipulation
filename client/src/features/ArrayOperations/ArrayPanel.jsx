@@ -41,7 +41,7 @@ const ArrayPanel = () => {
 
       // Append extra DTO fields based on operation
       if (operation === "sort") payload.orderType = sortDirection;
-      if (operation === "separation") payload.separationType = sepType;
+      if (operation === "separate") payload.separationType = sepType;
 
       const data = await postData(endpoint, payload);
       setResult(data);
@@ -75,7 +75,7 @@ const ArrayPanel = () => {
           >
             <option value="sum">Sum Array</option>
             <option value="sort">Sort Array</option>
-            <option value="separation">Separate Array</option>
+            <option value="separate">Separate Array</option>
           </select>
         </div>
 
@@ -92,8 +92,8 @@ const ArrayPanel = () => {
             </select>
           </div>
         )}
-        {/* TODO: Take a look that separation because the fetch is not working correctly*/}
-        {operation === "separation" && (
+
+        {operation === "separate" && (
           <div className="input-group">
             <label>Criteria:</label>
             <select
@@ -101,7 +101,7 @@ const ArrayPanel = () => {
               onChange={(e) => setSepType(e.target.value)}
             >
               <option value="parity">Parity (Even/Odd)</option>
-              <option value="sign">Sign (+/-)</option>
+              <option value="sign">Sign (Positive/Negative)</option>
             </select>
           </div>
         )}
