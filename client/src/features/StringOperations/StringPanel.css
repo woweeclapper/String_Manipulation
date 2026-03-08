@@ -1,0 +1,92 @@
+/* Container for the specific operation */
+.operation-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  max-width: 500px;
+  margin: 2rem auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.operation-card h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+}
+
+/* Form Layout */
+.input-group {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #34495e;
+}
+
+.input-group input,
+.input-group select {
+  padding: 0.8rem;
+  border: 1px solid #dcdde1;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* Action Button */
+button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Feedback States */
+.error-banner {
+  background-color: #fab1a0;
+  color: #c0392b;
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  border-left: 5px solid #e17055;
+}
+
+.result-area {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f1f2f6;
+  border-radius: 6px;
+}
+
+.highlight {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #27ae60;
+  word-break: break-all;
+}
