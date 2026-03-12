@@ -73,9 +73,9 @@ const ArrayPanel = () => {
             value={operation}
             onChange={(e) => setOperation(e.target.value)}
           >
-            <option value="sum">Sum Array</option>
-            <option value="sort">Sort Array</option>
-            <option value="separate">Separate Array</option>
+            <option value="sum">Total Sum</option>
+            <option value="sort">Sort</option>
+            <option value="separate">Separate</option>
           </select>
         </div>
 
@@ -100,8 +100,8 @@ const ArrayPanel = () => {
               value={sepType}
               onChange={(e) => setSepType(e.target.value)}
             >
-              <option value="parity">Parity (Even/Odd)</option>
-              <option value="sign">Sign (Positive/Negative)</option>
+              <option value="parity">Even/Odd</option>
+              <option value="sign">Positive/Negative</option>
             </select>
           </div>
         )}

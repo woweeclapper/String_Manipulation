@@ -49,6 +49,10 @@
   border: 2px solid transparent;
   width: 250px;
 }
+.choice-header {
+  font-size: 1.5rem;
+  color: #000000;
+}
 
 .choice-card:hover {
   transform: translateY(-10px);
