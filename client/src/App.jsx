@@ -20,7 +20,9 @@ function App() {
     const msg =
       newMode === "string"
         ? "Magical Letters! What should I do with them?"
-        : "Math Wizardry! Give me some numbers to crunch.";
+        : newMode === "array"
+          ? "Math Wizardry! Give me some numbers to crunch."
+          : "";
     setBotMessage(msg);
     setBotStatus("idle");
   };
