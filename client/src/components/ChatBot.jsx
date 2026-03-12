@@ -1,15 +1,18 @@
 import "./ChatBot.css";
+import askGif from "../assets/chatbot_ask.gif";
+import answerGif from "../assets/chatbot_answer.gif";
+import idleGif from "../assets/chatbot_idle.gif";
 
-const ChatBot = ({ message, isAnimating }) => {
-  // Logic to determine which GIF to show
+const ChatBot = ({ message, isAnimating, status }) => {
+  //logic to determine which gif is shown
   const getBotImage = () => {
     switch (status) {
       case "asking":
-        return "/assets/chatbot_ask.gif";
+        return askGif;
       case "answering":
-        return "/assets/chatbot_answer.gif";
+        return answerGif;
       default:
-        return "/assets/chatbot_idle.gif";
+        return idleGif;
     }
   };
 

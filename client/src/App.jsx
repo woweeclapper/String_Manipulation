@@ -1,6 +1,7 @@
 import { useState } from "react";
 import StringPanel from "./features/StringOperations/StringPanel";
 import ArrayPanel from "./features/ArrayOperations/ArrayPanel";
+import ChatBot from "./components/Chatbot";
 import "./App.css"; // Global layout styles
 
 {
@@ -11,8 +12,8 @@ function App() {
   const [botMessage, setBotMessage] = useState(
     "Hello! Would you like to work with Letters or Numbers?",
   );
-  const [botStatus, setBotStatus] = useState("idle"); // "idle", "processing", "success", "error"
-
+  const [botStatus, setBotStatus] = useState("asking"); // "idle", "processing", "success", "error"
+  const [isProcessing, setIsProcessing] = useState(false);
   // Helper to update bot when switching modes
   const handleModeSelect = (newMode) => {
     setMode(newMode);
@@ -21,6 +22,7 @@ function App() {
         ? "Magical Letters! What should I do with them?"
         : "Math Wizardry! Give me some numbers to crunch.";
     setBotMessage(msg);
+    setBotStatus("idle");
   };
 
   return (
@@ -36,12 +38,14 @@ function App() {
       </header>
 
       <main className="full-screen-main">
+        <ChatBot
+          message={botMessage}
+          isAnimating={isProcessing}
+          status={botStatus}
+        />
         {/* 2. The "Conditional Loop" Logic */}
         {!mode ? (
           <div className="selection-screen">
-            <h2 className="choice-header">
-              Would you like to work with Letters or Numbers?
-            </h2>
             <div className="choice-container">
               <div
                 className="choice-card"
