@@ -11,7 +11,7 @@ function App() {
   const [botMessage, setBotMessage] = useState(
     "Hello! Would you like to work with Letters or Numbers?",
   );
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [botStatus, setBotStatus] = useState("idle"); // "idle", "processing", "success", "error"
 
   // Helper to update bot when switching modes
   const handleModeSelect = (newMode) => {
@@ -43,20 +43,30 @@ function App() {
               Would you like to work with Letters or Numbers?
             </h2>
             <div className="choice-container">
-              <div className="choice-card" onClick={() => setMode("string")}>
+              <div
+                className="choice-card"
+                onClick={() => handleModeSelect("string")}
+              >
                 <h3>Letters</h3>
-                <p>Perform Magical Operation on a set of letters</p>
               </div>
-              <div className="choice-card" onClick={() => setMode("array")}>
+              <div
+                className="choice-card"
+                onClick={() => handleModeSelect("array")}
+              >
                 <h3>Numbers</h3>
-                <p>Activate your inner Math Wizard on a set of numbers</p>
               </div>
             </div>
           </div>
         ) : mode === "string" ? (
-          <StringPanel />
+          <StringPanel
+            setBotMessage={setBotMessage}
+            setIsProcessing={setIsProcessing}
+          />
         ) : (
-          <ArrayPanel />
+          <ArrayPanel
+            setBotMessage={setBotMessage}
+            setIsProcessing={setIsProcessing}
+          />
         )}
       </main>
     </div>
