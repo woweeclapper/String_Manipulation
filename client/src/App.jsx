@@ -1,7 +1,7 @@
 import { useState } from "react";
 import StringPanel from "./features/StringOperations/StringPanel";
 import ArrayPanel from "./features/ArrayOperations/ArrayPanel";
-import ChatBot from "./components/Chatbot";
+import ChatBot from "./components/ChatBot/ChatBot";
 import "./App.css"; // Global layout styles
 
 {
