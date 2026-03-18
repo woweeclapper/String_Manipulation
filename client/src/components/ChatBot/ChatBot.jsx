@@ -1,7 +1,7 @@
 import "./ChatBot.css";
-import askGif from "../assets/chatbot_ask.gif";
-import answerGif from "../assets/chatbot_answer.gif";
-import idleGif from "../assets/chatbot_idle.gif";
+import askGif from "../../assets/chatbot_ask.gif";
+import answerGif from "../../assets/chatbot_answer.gif";
+import idleGif from "../../assets/chatbot_idle.gif";
 
 const ChatBot = ({ message, isAnimating, status }) => {
   //logic to determine which gif is shown

@@ -2,6 +2,7 @@ import { useState } from "react";
 import StringPanel from "./features/StringOperations/StringPanel";
 import ArrayPanel from "./features/ArrayOperations/ArrayPanel";
 import ChatBot from "./components/ChatBot/ChatBot";
+//import ParticleSphere from "./components/ParticleSphere/ParticleSphere";
 import "./App.css"; // Global layout styles
 
 {
@@ -12,7 +13,7 @@ function App() {
   const [botMessage, setBotMessage] = useState(
     "Hello! Would you like to work with Letters or Numbers?",
   );
-  const [botStatus, setBotStatus] = useState("asking"); // "idle", "processing", "success", "error"
+  const [botStatus, setBotStatus] = useState("asking"); // "idle", "asking", "answering"
   const [isProcessing, setIsProcessing] = useState(false);
   // Helper to update bot when switching modes
   const handleModeSelect = (newMode) => {
@@ -22,7 +23,7 @@ function App() {
         ? "Magical Letters! What should I do with them?"
         : newMode === "array"
           ? "Math Wizardry! Give me some numbers to crunch."
-          : "";
+          : "Hello again! Would you like to work with Letters or Numbers?";
     setBotMessage(msg);
     setBotStatus("idle");
   };
@@ -45,6 +46,7 @@ function App() {
           isAnimating={isProcessing}
           status={botStatus}
         />
+        {/*  <ParticleSphere />  */}
         {/* 2. The "Conditional Loop" Logic */}
         {!mode ? (
           <div className="selection-screen">
