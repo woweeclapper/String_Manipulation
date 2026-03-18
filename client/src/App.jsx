@@ -46,7 +46,7 @@ function App() {
           isAnimating={isProcessing}
           status={botStatus}
         />
-        {/*  <ParticleSphere />  */}
+        {/* <ParticleSphere /> */}
         {/* 2. The "Conditional Loop" Logic */}
         {!mode ? (
           <div className="selection-screen">
