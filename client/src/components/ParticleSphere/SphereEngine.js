@@ -2,8 +2,8 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 
+export let triggerMorph; // Exported function to trigger morphing
 export const initSphere = (container) => {
-  // ... Paste your variables (scene, camera, etc.) from script.js here ...
   let scene, camera, renderer, particles;
   const count = 12000;
   let currentState = "sphere";
@@ -24,7 +24,9 @@ export const initSphere = (container) => {
     camera.position.z = 25;
 
     createParticles();
-    setupEventListeners();
+    triggerMorph = (text) => {
+      morphToText(text);
+    }; // Export the morphToText; // Assign the morph function to the exported variable
     animate();
   }
   function createParticles() {
