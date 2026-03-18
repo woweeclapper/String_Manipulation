@@ -2,7 +2,7 @@ import { useState } from "react";
 import StringPanel from "./features/StringOperations/StringPanel";
 import ArrayPanel from "./features/ArrayOperations/ArrayPanel";
 import ChatBot from "./components/ChatBot/ChatBot";
-//import ParticleSphere from "./components/ParticleSphere/ParticleSphere";
+import ParticleSphere from "./components/ParticleSphere/ParticleSphere";
 import "./App.css"; // Global layout styles
 
 {
@@ -46,7 +46,7 @@ function App() {
           isAnimating={isProcessing}
           status={botStatus}
         />
-        {/* <ParticleSphere /> */}
+        <ParticleSphere />
         {/* 2. The "Conditional Loop" Logic */}
         {!mode ? (
           <div className="selection-screen">

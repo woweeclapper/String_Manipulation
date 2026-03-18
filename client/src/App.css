@@ -1,7 +1,7 @@
 .app-container {
   min-height: 100vh;
   width: 100vw;
-  background-color: #d44242;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +10,7 @@
 .app-header {
   margin-top: 3rem;
   text-align: center;
-  color: #2c3e50;
+  color: #ffffff;
 }
 
 .app-footer {
@@ -39,7 +39,7 @@
 }
 
 .choice-card {
-  background: #2d2d2d;
+  background: #0772d6;
   padding: 3rem;
   border-radius: 15px;
   cursor: pointer;
