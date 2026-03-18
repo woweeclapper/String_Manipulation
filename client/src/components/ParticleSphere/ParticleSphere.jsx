@@ -8,7 +8,7 @@ const ParticleSphere = () => {
 
   //react version of the event listener
   const handleMorph = () => {
-    if (inputValue.trim()) {
+    if (inputValue.trim() && typeof triggerMorph === "function") {
       triggerMorph(inputValue.trim());
       setInputValue(""); //clear input after morphing
     }

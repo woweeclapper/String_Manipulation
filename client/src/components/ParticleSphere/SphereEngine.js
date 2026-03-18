@@ -8,6 +8,13 @@ export const initSphere = (container) => {
   const count = 12000;
   let currentState = "sphere";
 
+  const onWindowResize = () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  };
+  window.addEventListener("resize", onWindowResize);
+
   function init() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(
@@ -243,6 +250,7 @@ export const initSphere = (container) => {
 
   // Return a cleanup function so React can stop the animation
   return () => {
+    window.removeEventListener("resize", onWindowResize); //critical cleanup
     renderer.dispose();
     container.removeChild(renderer.domElement);
   };
