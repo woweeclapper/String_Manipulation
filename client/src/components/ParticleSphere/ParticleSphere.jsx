@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { initSphere, triggerMorph } from "./SphereEngine";
 import "./ParticleSphere.css";
 
