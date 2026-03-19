@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { initSphere, triggerMorph } from "./SphereEngine";
 import "./ParticleSphere.css";
 
+//TODO: hook this up to display results after executing from the panel
 const ParticleSphere = () => {
   const [inputValue, setInputValue] = useState("");
   const mountRef = useRef(null);
@@ -39,6 +40,7 @@ const ParticleSphere = () => {
             placeholder="Type something..."
             maxLength="20"
           />
+          {/* TODO: this button and its accessory will be remove, because the result will be display by the sphere (its sole purporse) */}
           <button id="typeBtn" onClick={handleMorph}>
             <span className="button-content">
               <svg

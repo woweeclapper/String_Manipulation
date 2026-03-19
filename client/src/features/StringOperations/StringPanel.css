@@ -24,10 +24,11 @@
   flex-direction: column;
 }
 
+/* TODO: input text is transparent or invisible, shared with ArrayPanel, fix once to fix both */
 .input-group label {
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #34495e;
+  color: #000000;
 }
 
 .input-group input,

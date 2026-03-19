@@ -7,6 +7,7 @@ import "./App.css"; // Global layout styles
 
 {
   /*TODO: Styling and Layout post implmentation */
+  //TODO: Hook up particle sphere to display results from the panel
 }
 function App() {
   const [mode, setMode] = useState(null);
@@ -31,6 +32,7 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
+        {/* TODO: prob some better title and description, but this is just a demo so its not super important */}
         <h1>Chatbot Operation</h1>
         <p>Full-Stack Demo: React + Spring Boot</p>
         {mode && (

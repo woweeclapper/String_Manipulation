@@ -9,7 +9,7 @@ const ChatBot = ({ message, isAnimating, status }) => {
     switch (status) {
       case "asking":
         return askGif;
-      case "answering":
+      case "answering": //TODO: take a look at this case so it actually show when the server returned an answer
         return answerGif;
       default:
         return idleGif;

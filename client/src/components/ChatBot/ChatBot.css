@@ -1,4 +1,5 @@
 /* ChatBot container - positioning it in the corner */
+
 .chatbot-container {
   position: fixed;
   bottom: 20px;
@@ -11,6 +12,7 @@
 }
 
 /* The Text Bubble */
+/* TODO: Text bubble shifted when importing ParticleSphere, fix it with checking to make sure the container/div is not interfering */
 .chat-bubble {
   background-color: white;
   color: black; /* Your request: Black text */

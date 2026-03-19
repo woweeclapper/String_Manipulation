@@ -2,6 +2,7 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 
+//TODO: size could be limited, need to change particle to allow dynamic size rendering
 export let triggerMorph; // Exported function to trigger morphing
 export const initSphere = (container) => {
   let scene, camera, renderer, particles;
