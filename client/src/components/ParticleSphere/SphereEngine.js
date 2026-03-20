@@ -1,5 +1,15 @@
 // client/src/features/Visualizer/SphereEngine.js
-import * as THREE from "three";
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  BufferGeometry,
+  BufferAttribute,
+  PointsMaterial,
+  Points,
+  AdditiveBlending,
+  Color,
+} from "three";
 import { gsap } from "gsap";
 
 //TODO: size could be limited, need to change particle to allow dynamic size rendering
@@ -17,14 +27,14 @@ export const initSphere = (container) => {
   window.addEventListener("resize", onWindowResize);
 
   function init() {
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(
+    scene = new Scene();
+    camera = new PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
       1000,
     );
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000);
     // CHANGE: Use the container passed from React
@@ -38,7 +48,7 @@ export const initSphere = (container) => {
     animate();
   }
   function createParticles() {
-    const geometry = new THREE.BufferGeometry();
+    const geometry = new BufferGeometry();
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
 
@@ -60,7 +70,7 @@ export const initSphere = (container) => {
       positions[i * 3 + 1] = point.y + (Math.random() - 0.5) * 0.5;
       positions[i * 3 + 2] = point.z + (Math.random() - 0.5) * 0.5;
 
-      const color = new THREE.Color();
+      const color = new Color();
       const depth =
         Math.sqrt(point.x * point.x + point.y * point.y + point.z * point.z) /
         8;
@@ -71,20 +81,20 @@ export const initSphere = (container) => {
       colors[i * 3 + 2] = color.b;
     }
 
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute("position", new BufferAttribute(positions, 3));
+    geometry.setAttribute("color", new BufferAttribute(colors, 3));
 
-    const material = new THREE.PointsMaterial({
+    const material = new PointsMaterial({
       size: 0.08,
       vertexColors: true,
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
       transparent: true,
       opacity: 0.8,
       sizeAttenuation: true,
     });
 
     if (particles) scene.remove(particles);
-    particles = new THREE.Points(geometry, material);
+    particles = new Points(geometry, material);
     particles.rotation.x = 0;
     particles.rotation.y = 0;
     particles.rotation.z = 0;
@@ -203,7 +213,7 @@ export const initSphere = (container) => {
       const depth =
         Math.sqrt(point.x * point.x + point.y * point.y + point.z * point.z) /
         8;
-      const color = new THREE.Color();
+      const color = new Color();
       color.setHSL(0.5 + depth * 0.2, 0.7, 0.4 + depth * 0.3);
 
       colors[i * 3] = color.r;
