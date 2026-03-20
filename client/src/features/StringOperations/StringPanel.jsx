@@ -2,7 +2,11 @@ import { useState } from "react";
 import { postData } from "../../api/apiClient";
 import "./StringPanel.css";
 
-const StringPanel = () => {
+const StringPanel = ({
+  //setBotMessage /*might have to get rid of this*/,
+  setIsProcessing,
+  onResult,
+}) => {
   // 1. State Management: The "Source of Truth"
   const [inputText, setInputText] = useState("");
   const [operation, setOperation] = useState("reverse"); // Default to reverse
@@ -35,11 +39,16 @@ const StringPanel = () => {
       }
 
       const data = await postData(endpoint, payload);
+      const resultString = data.reversedText || data.shiftedText; // Assuming API returns either reversedText or shiftedText
       setResult(data);
+      if (onResult) {
+        onResult(resultString); // Pass result to ParticleSphere
+      }
     } catch (err) {
       // This catches the 429 or 400 errors from our apiClient
       setError(err.message);
     } finally {
+      setIsProcessing(false);
       setIsLoading(false);
     }
   };

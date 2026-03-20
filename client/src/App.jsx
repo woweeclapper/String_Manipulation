@@ -15,16 +15,19 @@ function App() {
     "Hello! Would you like to work with Letters or Numbers?",
   );
   const [botStatus, setBotStatus] = useState("asking"); // "idle", "asking", "answering"
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false); //loading state
+  const [sphereOutput, setSphereOutput] = useState(""); // State to hold output for the particle sphere
   // Helper to update bot when switching modes
+
   const handleModeSelect = (newMode) => {
     setMode(newMode);
+    setSphereOutput(""); // Clear previous result when switching modes
     const msg =
       newMode === "string"
         ? "Magical Letters! What should I do with them?"
         : newMode === "array"
           ? "Math Wizardry! Give me some numbers to crunch."
-          : "Hello again! Would you like to work with Letters or Numbers?";
+          : "Hello again! Would you like to work with Letters or Numbers?"; //TODO: make this case shows up when switching back to selection screen
     setBotMessage(msg);
     setBotStatus("idle");
   };
@@ -48,7 +51,7 @@ function App() {
           isAnimating={isProcessing}
           status={botStatus}
         />
-        <ParticleSphere />
+        <ParticleSphere result={sphereOutput} />
         {/* 2. The "Conditional Loop" Logic */}
         {!mode ? (
           <div className="selection-screen">
@@ -71,11 +74,13 @@ function App() {
           <StringPanel
             setBotMessage={setBotMessage}
             setIsProcessing={setIsProcessing}
+            onResult={setSphereOutput} // Pass result to ParticleSphere
           />
         ) : (
           <ArrayPanel
             setBotMessage={setBotMessage}
             setIsProcessing={setIsProcessing}
+            onResult={setSphereOutput} // Pass result to ParticleSphere
           />
         )}
       </main>

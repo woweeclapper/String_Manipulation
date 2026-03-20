@@ -2,7 +2,9 @@ import { useState } from "react";
 import { postData } from "../../api/apiClient";
 import "./ArrayPanel.css";
 
-const ArrayPanel = () => {
+const ArrayPanel = (//setBotMessage, 
+  setIsProcessing, 
+  onResult) => {
   const [rawInput, setRawInput] = useState("");
   const [operation, setOperation] = useState("sum");
   const [sortDirection, setSortDirection] = useState("ascending");
@@ -42,12 +44,26 @@ const ArrayPanel = () => {
       // Append extra DTO fields based on operation
       if (operation === "sort") payload.orderType = sortDirection;
       if (operation === "separate") payload.separationType = sepType;
-
       const data = await postData(endpoint, payload);
       setResult(data);
+
+      let displayValue = "";
+      if (operation === "sum") displayValue = `Sum: ${data.sum}`;
+      else if (operation === "sort")
+        displayValue = `Sorted: [${data.sortedList.join(", ")}]`;
+      else if (operation === "separate") {
+        displayValue =
+          sepType === "parity"
+            ? `Even: [${data.evenOdd.firstList.join(", ")}], Odd: [${data.evenOdd.secondList.join(", ")}]`
+            : `Positive: [${data.posNeg.firstList.join(", ")}], Negative: [${data.posNeg.secondList.join(", ")}]`;
+      }
+      if (onResult) {
+        onResult(displayValue); // Pass result to ParticleSphere
+      }
     } catch (err) {
       setError(err.message);
     } finally {
+      setIsProcessing(false);
       setIsLoading(false);
     }
   };
