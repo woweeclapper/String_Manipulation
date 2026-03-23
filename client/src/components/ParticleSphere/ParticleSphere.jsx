@@ -1,24 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { initSphere, triggerMorph } from "./SphereEngine";
 import "./ParticleSphere.css";
 
 //TODO: hook this up to display results after executing from the panel
-const ParticleSphere = () => {
-  const [inputValue, setInputValue] = useState("");
+const ParticleSphere = ({ result }) => {
   const mountRef = useRef(null);
 
-  //react version of the event listener
-  const handleMorph = () => {
-    if (inputValue.trim() && typeof triggerMorph === "function") {
-      triggerMorph(inputValue.trim());
-      setInputValue(""); //clear input after morphing
+  useEffect(() => {
+    if (result?.trim() && typeof triggerMorph === "function") {
+      triggerMorph(result.trim());
     }
-  };
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleMorph();
-    }
-  };
+  }, [result]);
+
   useEffect(() => {
     // This is the "Bridge" - it runs AFTER the HTML is on the screen
     const cleanup = initSphere(mountRef.current);
@@ -29,40 +22,7 @@ const ParticleSphere = () => {
     <div className="particle-sphere-wrapper">
       <div ref={mountRef} id="container" />
 
-      <div className="input-container">
-        <div className="input-wrapper">
-          <input
-            type="text"
-            id="morphText"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)} //updates as you typed
-            onKeyDown={handleKeyDown} //handles "Enter" key
-            placeholder="Type something..."
-            maxLength="20"
-          />
-          {/* TODO: this button and its accessory will be remove, because the result will be display by the sphere (its sole purporse) */}
-          <button id="typeBtn" onClick={handleMorph}>
-            <span className="button-content">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5 12H19M19 12L12 5M19 12L12 19"
-                  stroke="currentColor"
-                  strokeWidth="2" // Note: stroke-width becomes strokeWidth in JSX
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span>Create</span>
-            </span>
-          </button>
-        </div>
-      </div>
+      {/* Input removed - driven by panel results */}
     </div>
   );
 };
