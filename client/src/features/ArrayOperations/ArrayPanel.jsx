@@ -2,9 +2,7 @@ import { useState } from "react";
 import { postData } from "../../api/apiClient";
 import "./ArrayPanel.css";
 
-const ArrayPanel = (//setBotMessage, 
-  setIsProcessing, 
-  onResult) => {
+const ArrayPanel = (/*setBotMessage,*/ setIsProcessing, onResult) => {
   const [rawInput, setRawInput] = useState("");
   const [operation, setOperation] = useState("sum");
   const [sortDirection, setSortDirection] = useState("ascending");

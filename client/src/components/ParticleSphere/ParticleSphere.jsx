@@ -21,8 +21,6 @@ const ParticleSphere = ({ result }) => {
   return (
     <div className="particle-sphere-wrapper">
       <div ref={mountRef} id="container" />
-
-      {/* Input removed - driven by panel results */}
     </div>
   );
 };
