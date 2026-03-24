@@ -13,13 +13,14 @@
 }
 
 /* The Text Bubble */
-/* TODO: Text bubble shifted when importing ParticleSphere, fix it with checking to make sure the container/div is not interfering */
+
 .chat-bubble {
-  background-color: white;
+  background-color: rgb(255, 255, 255);
+  border: 3px solid #ff0800;
   color: black;
   padding: 12px 20px;
   border-radius: 18px;
-  margin-bottom: 10px;
+  margin-bottom: -30px;
   margin-left: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   width: max-content;
