@@ -20,6 +20,7 @@
   padding: 12px 20px;
   border-radius: 18px;
   margin-bottom: 10px;
+  margin-left: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   width: max-content;
   max-width: 250px;
@@ -38,7 +39,6 @@
   bottom: -10px;
   left: auto;
   right: 30px;
-  transform: translateX(-50%);
   border-width: 10px 10px 0;
   border-style: solid;
   border-color: white transparent transparent;
@@ -50,7 +50,7 @@
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-50px); /* Moves up by 8 pixels */
+    transform: translateY(-20px);
   }
   100% {
     transform: translateY(0px);
