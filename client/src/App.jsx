@@ -45,7 +45,7 @@ function App() {
         )}
       </header>
 
-      <main className="full-screen-main">
+      <main className={`full-screen-main ${mode ? "panel-active" : ""}`}>
         <ChatBot
           message={botMessage}
           isAnimating={isProcessing}
