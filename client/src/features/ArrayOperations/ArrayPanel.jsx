@@ -48,12 +48,12 @@ const ArrayPanel = (/*setBotMessage,*/ setIsProcessing, onResult) => {
       let displayValue = "";
       if (operation === "sum") displayValue = `Sum: ${data.sum}`;
       else if (operation === "sort")
-        displayValue = `Sorted: [${data.sortedList.join(", ")}]`;
+        displayValue = `Sorted: [${data.sorted.join(", ")}]`;
       else if (operation === "separate") {
         displayValue =
           sepType === "parity"
-            ? `Even: [${data.evenOdd.firstList.join(", ")}], Odd: [${data.evenOdd.secondList.join(", ")}]`
-            : `Positive: [${data.posNeg.firstList.join(", ")}], Negative: [${data.posNeg.secondList.join(", ")}]`;
+            ? `Even: [${data.evenOdd.firstGroup.join(", ")}], Odd: [${data.evenOdd.secondGroup.join(", ")}]`
+            : `Positive: [${data.posNeg.firstGroup.join(", ")}], Negative: [${data.posNeg.secondGroup.join(", ")}]`;
       }
       if (onResult) {
         onResult(displayValue); // Pass result to ParticleSphere
