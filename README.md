@@ -60,7 +60,7 @@ Sorts an array of numbers in ascending or descending order.
 **Response DTO:** `IntSortResponse` or `DoubleSortResponse`
 ```json
 {
-  "sortedList": [1, 1, 3, 4, 5],
+  "sorted": [1, 1, 3, 4, 5],
   "orderType": "ASCENDING"
 }
 ```
@@ -77,11 +77,22 @@ Separates numbers based on parity (even/odd) or sign (positive/negative).
 ```
 
 **Response DTO:** `IntSepResponses` or `DoubleSepResponse`
+
+**Parity Separation Example:**
 ```json
 {
-  "firstList": [2, 4],
-  "secondList": [1, -3, -5],
+  "firstGroup": [2, 4],    // Even numbers
+  "secondGroup": [1, -3, -5], // Odd numbers
   "separationType": "PARITY"
+}
+```
+
+**Sign Separation Example:**
+```json
+{
+  "firstGroup": [1, 2, 4],   // Positive numbers
+  "secondGroup": [-3, -5],   // Negative numbers
+  "separationType": "SIGN"
 }
 ```
 
@@ -128,26 +139,50 @@ Shifts characters in a string left or right by specified positions.
 ## Request DTOs
 
 ### Array DTOs
-- **`SumRequest`**: List of numbers to sum
-- **`SortRequest`**: List of numbers + sort order (ASCENDING/DESCENDING)
-- **`SeparationRequest`**: List of numbers + separation type (PARITY/SIGN)
+- **`SumRequest`**: 
+  - `numbersList`: List of numbers to sum (1-1000 elements, no null values)
+- **`SortRequest`**: 
+  - `numbersList`: List of numbers to sort (1-1000 elements, no null values)
+  - `orderType`: Sort order - "ASCENDING", "DESCENDING", "A", or "D" (case-insensitive)
+- **`SeparationRequest`**: 
+  - `numbersList`: List of numbers to separate (1-1000 elements, no null values)
+  - `separationType`: Separation type - "PARITY" or "SIGN"
 
 ### String DTOs
-- **`ReverseRequest`**: Text string to reverse
-- **`ShiftRequest`**: Text string + number of shifts + direction (LEFT/RIGHT)
+- **`ReverseRequest`**: 
+  - `text`: Text string to reverse (max 10,000 characters, cannot be blank)
+- **`ShiftRequest`**: 
+  - `text`: Text string to shift (max 10,000 characters, cannot be blank)
+  - `numOfShifts`: Number of positions to shift (non-negative integer)
+  - `direction`: Shift direction - "LEFT", "RIGHT", "L", or "R" (case-insensitive)
 
 ## Response DTOs
 
 ### Array Responses
-- **`SumResponse`**: Contains the calculated sum (double)
-- **`IntSortResponse`**: Sorted integer list + order type
-- **`DoubleSortResponse`**: Sorted double list + order type
-- **`IntSepResponses`**: Two integer lists + separation type
-- **`DoubleSepResponse`**: Two double lists + separation type
+- **`SumResponse`**: 
+  - `sum`: The calculated sum (double)
+- **`IntSortResponse`**: 
+  - `sorted`: Sorted integer list
+  - `orderType`: The sort order used
+- **`DoubleSortResponse`**: 
+  - `sorted`: Sorted double list
+  - `orderType`: The sort order used
+- **`IntSepResponses`**: 
+  - `firstGroup`: First integer group (even/positive numbers)
+  - `secondGroup`: Second integer group (odd/negative numbers)
+  - `separationType`: The separation type used
+- **`DoubleSepResponse`**: 
+  - `firstGroup`: First double group (even/positive numbers)
+  - `secondGroup`: Second double group (odd/negative numbers)
+  - `separationType`: The separation type used
 
 ### String Responses
-- **`ReverseResponse`**: Reversed text string
-- **`ShiftResponse`**: Shifted text + shift count + direction
+- **`ReverseResponse`**: 
+  - `reversedText`: The reversed text string
+- **`ShiftResponse`**: 
+  - `shiftedText`: The shifted text string
+  - `numOfShifts`: Number of shifts applied
+  - `direction`: The shift direction used
 
 ## Error Response Format
 
