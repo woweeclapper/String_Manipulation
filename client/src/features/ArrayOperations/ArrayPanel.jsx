@@ -52,8 +52,8 @@ const ArrayPanel = (/*setBotMessage,*/ setIsProcessing, onResult) => {
       else if (operation === "separate") {
         displayValue =
           sepType === "parity"
-            ? `Even: [${data.evenOdd.firstGroup.join(", ")}], Odd: [${data.evenOdd.secondGroup.join(", ")}]`
-            : `Positive: [${data.posNeg.firstGroup.join(", ")}], Negative: [${data.posNeg.secondGroup.join(", ")}]`;
+            ? `Even: [${(data.firstGroup || []).join(", ")}], Odd: [${(data.secondGroup || []).join(", ")}]`
+            : `Positive: [${(data.firstGroup || []).join(", ")}], Negative: [${(data.secondGroup || []).join(", ")}]`;
       }
       if (onResult) {
         onResult(displayValue); // Pass result to ParticleSphere
